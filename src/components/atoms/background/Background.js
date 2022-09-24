@@ -1,18 +1,16 @@
 import React from "react";
 import "./background.css";
 
-const Background = (props) => {
+const Background = ({ isgradient, isCircle, circleAlign }) => {
   return (
     <>
-      {props.isgradient ? (
+      {isgradient ? (
         <div className="area">
-          {props.isCircle && (
+          {isCircle && (
             <div className="circles">
               <div
                 className={
-                  props.circleAlign
-                    ? "circle " + props.circleAlign
-                    : "circle right"
+                  circleAlign ? "circle " + circleAlign : "circle right"
                 }
               ></div>
             </div>

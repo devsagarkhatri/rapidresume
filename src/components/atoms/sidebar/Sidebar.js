@@ -30,6 +30,7 @@ import {
 import { IconType } from "react-icons";
 import { ReactText } from "react";
 import Background from "../background/Background";
+import "./sidebar.css";
 
 const LinkItems = [
   {
@@ -67,6 +68,7 @@ export default function Sidebar({ children }) {
       marginTop={"50px"}
       position={"relative"}
       bg={useColorModeValue("gray.100", "gray.900")}
+      className="boxthis"
     >
       <SidebarContent
         onClose={() => onClose}
@@ -105,7 +107,8 @@ const SidebarContent = ({ onClose, ...rest }) => {
       borderRight="1px"
       borderRightColor={useColorModeValue("gray.200", "gray.700")}
       borderTopRightRadius={"50px"}
-      w={{ base: "full", md: 60 }}
+      paddingStart={"8"}
+          w={{ base: "full", md: 60 }}
       pos="fixed"
       minH={0}
       h="full"

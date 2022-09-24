@@ -48,7 +48,7 @@ const avatars = [
   },
 ];
 
-export default function Signup() {
+export default function SignupComponent() {
   let [showPassword, setShowPassword] = useState();
   return (
     <Box position={"relative"}>
@@ -215,12 +215,6 @@ export default function Signup() {
           </Box>
         </Stack>
       </Container>
-      <Blur
-        position={"absolute"}
-        top={-10}
-        left={-10}
-        style={{ filter: "blur(70px)" }}
-      />
     </Box>
   );
 }
