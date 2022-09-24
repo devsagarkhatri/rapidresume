@@ -6,19 +6,12 @@ import Sidebar from "./components/atoms/sidebar/Sidebar";
 import Login from "./components/molecule/login/Login";
 import Signup from "./components/molecule/signup/Signup";
 import Footer from "./components/atoms/footer/Footer";
+import LandingPage from "./components/atoms/landingPage/LandingPage";
 
 function App() {
   return (
     <>
-      <Background isgradient isCircle />
-      {/* <Header />
-      <div className="container">
-        <div className="col">
-          <Login />
-          <Footer />
-        </div>
-      </div> */}
-      <Sidebar />
+      <LandingPage />
     </>
   );
 }
