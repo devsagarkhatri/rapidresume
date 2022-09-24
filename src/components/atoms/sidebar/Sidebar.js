@@ -13,6 +13,11 @@ import {
   useDisclosure,
   BoxProps,
   FlexProps,
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
 } from "@chakra-ui/react";
 import {
   FiHome,
@@ -27,11 +32,31 @@ import { ReactText } from "react";
 import Background from "../background/Background";
 
 const LinkItems = [
-  { name: "Fonts", icon: FiHome },
-  { name: "Headings", icon: FiTrendingUp },
-  { name: "Sections", icon: FiCompass },
-  { name: "Section Order", icon: FiStar },
-  { name: "Themes", icon: FiSettings },
+  {
+    name: "Fonts",
+    icon: FiHome,
+    data: "Lorem ipsum dolor sit amet, ",
+  },
+  {
+    name: "Headings",
+    icon: FiTrendingUp,
+    data: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, ",
+  },
+  {
+    name: "Sections",
+    icon: FiCompass,
+    data: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
+  },
+  {
+    name: "Section Order",
+    icon: FiStar,
+    data: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Utenim ad minim veniam",
+  },
+  {
+    name: "Themes",
+    icon: FiSettings,
+    data: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Utenim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+  },
 ];
 
 export default function Sidebar({ children }) {
@@ -83,7 +108,6 @@ const SidebarContent = ({ onClose, ...rest }) => {
       w={{ base: "full", md: 60 }}
       pos="fixed"
       minH={0}
-      width={"0px"}
       h="full"
       {...rest}
     >
@@ -93,11 +117,25 @@ const SidebarContent = ({ onClose, ...rest }) => {
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
-          {link.name}
-        </NavItem>
-      ))}
+      <Accordion allowToggle>
+        {LinkItems.map((link) => (
+          //   <NavItem key={link.name} icon={link.icon}>
+          <AccordionItem border={"0px"} paddingTop={"5px"}>
+            <h2>
+              <AccordionButton
+                _expanded={{ borderBottom: "2px", borderBottomColor: "Black" }}
+              >
+                <Icon as={link.icon} marginEnd={"10px"} />
+                <Box flex="1" textAlign="left">
+                  {link.name}
+                </Box>
+              </AccordionButton>
+            </h2>
+            <AccordionPanel color={"black"}>{link.data}</AccordionPanel>
+          </AccordionItem>
+          //   </NavItem>
+        ))}
+      </Accordion>
     </Box>
   );
 };
