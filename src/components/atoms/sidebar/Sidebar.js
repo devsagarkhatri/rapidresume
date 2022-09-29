@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import {
   IconButton,
   Box,
@@ -60,7 +60,47 @@ const LinkItems = [
   },
 ];
 
-export default function Sidebar({ children }) {
+export function SidebarClose({ children }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  return (
+    <Box
+      minH="0vh"
+      marginTop={"20px"}
+      position={"relative"}
+      bg={useColorModeValue("red.100", "gray.900")}
+      className="boxclose px-5"
+    >
+      <SidebarContent
+        onClose={() => onClose}
+        display={{ base: "none", md: "block" }}
+      />
+      <Drawer
+        autoFocus={false}
+        isOpen={isOpen}
+        placement="left"
+        onClose={onClose}
+        returnFocusOnClose={false}
+        onOverlayClick={onClose}
+        size="full"
+      >
+        <DrawerContent>
+          <SidebarContentClose
+            onClose={onClose}
+            isSidebarOpen={children.isSidebarOpen}
+            setIsSidebarOpen={children.setIsSidebarOpen}
+          />
+        </DrawerContent>
+      </Drawer>
+      {/* mobilenav */}
+      <MobileNav display={{ base: "flex", md: "none" }} onOpen={onOpen} />
+      <Box ml={{ base: 0, md: 60 }} p="4">
+        {children}
+      </Box>
+    </Box>
+  );
+}
+
+export function SidebarOpen({ children }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box
@@ -84,7 +124,11 @@ export default function Sidebar({ children }) {
         size="full"
       >
         <DrawerContent>
-          <SidebarContent onClose={onClose} />
+          <SidebarContent
+            onClose={onClose}
+            isSidebarOpen={children.isSidebarOpen}
+            setIsSidebarOpen={children.setIsSidebarOpen}
+          />
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
@@ -94,6 +138,12 @@ export default function Sidebar({ children }) {
       </Box>
     </Box>
   );
+}
+
+export function Sidebar(  ) {
+  let [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  return <SidebarOpen />;
 }
 
 // interface SidebarProps extends BoxProps {
@@ -108,17 +158,25 @@ const SidebarContent = ({ onClose, ...rest }) => {
       borderRightColor={useColorModeValue("gray.200", "gray.700")}
       borderTopRightRadius={"50px"}
       paddingStart={"8"}
-          w={{ base: "full", md: 60 }}
+      w={{ base: "full", md: 60 }}
       pos="fixed"
       minH={0}
       h="full"
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold" as={"u"}>
           Menu
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
+        <Text
+          fontSize="2xl"
+          fontFamily="monospace"
+          fontWeight="bold"
+          onClick={() => rest.setIsSidebarOpen(!rest.isSidebarOpen)}
+        >
+          x
+        </Text>
       </Flex>
       <Accordion allowToggle>
         {LinkItems.map((link) => (
@@ -135,6 +193,57 @@ const SidebarContent = ({ onClose, ...rest }) => {
               </AccordionButton>
             </h2>
             <AccordionPanel color={"black"}>{link.data}</AccordionPanel>
+          </AccordionItem>
+          //   </NavItem>
+        ))}
+      </Accordion>
+    </Box>
+  );
+};
+
+const SidebarContentClose = ({ onClose, ...rest }) => {
+  return (
+    <Box
+      bg={useColorModeValue("white", "gray.900")}
+      borderRight="1px"
+      borderRightColor={useColorModeValue("gray.200", "gray.700")}
+      borderTopRightRadius={"50px"}
+      paddingStart={"8"}
+      w={{ base: "full", md: 60 }}
+      pos="fixed"
+      minH={0}
+      h="full"
+      {...rest}
+    >
+      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
+        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold" as={"u"}>
+          Menu
+        </Text>
+        <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
+        <Text
+          fontSize="2xl"
+          fontFamily="monospace"
+          fontWeight="bold"
+          onClick={() => rest.setIsSidebarOpen(!rest.isSidebarOpen)}
+        >
+          x
+        </Text>
+      </Flex>
+      <Accordion>
+        {LinkItems.map((link) => (
+          //   <NavItem key={link.name} icon={link.icon}>
+          <AccordionItem border={"0px"} paddingTop={"5px"}>
+            <h2>
+              <AccordionButton
+                _expanded={{ borderBottom: "2px", borderBottomColor: "Black" }}
+                rotate={"90"}
+              >
+                <Icon as={link.icon} marginEnd={"10px"} />
+                <Box flex="1" textAlign="left">
+                  {link.name}
+                </Box>
+              </AccordionButton>
+            </h2>
           </AccordionItem>
           //   </NavItem>
         ))}
