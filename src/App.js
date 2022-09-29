@@ -1,10 +1,10 @@
 import "./App.css";
-import LandingPage from "./components/LandingPage";
+import Settings from "./components/Settings";
 
 function App() {
     return (
         <>
-            <LandingPage />
+            <Settings />
         </>
     );
 }

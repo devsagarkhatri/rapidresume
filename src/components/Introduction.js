@@ -3,8 +3,8 @@ import Resumes from "../assets/resumes.png";
 
 const Introduction = () => {
     return (
-        <div className="flex pt-[130px] box-border relative px-[10rem] justify-around z-0 ">
-            <div className="w-[600px] h-[600px] bg-gradient-to-r from-bgBlue to-bgPurple absolute top-52 z-10 -right-24 rounded-full"></div>
+        <div className="flex pt-[130px] h-min box-border relative px-[10rem] justify-around z-0 ">
+            <div className="w-[600px] h-[600px] overflow-hidden  bg-gradient-to-r from-bgBlue to-bgPurple absolute top-52 z-10 -right-24 rounded-full"></div>
             <div className="w-[35rem] h-[35rem] pt-20 z-10 flex flex-col items-start text-white">
                 <h2 className="text-6xl leading-[4.25rem] pb-8 ">
                     Create your resume for free in minutes.

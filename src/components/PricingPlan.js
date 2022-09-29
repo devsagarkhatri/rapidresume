@@ -86,7 +86,7 @@ const PricingPlan = () => {
                         type="button"
                         className="p-3 px-5 text-[#459EFF] rounded-full bg-white"
                     >
-                        Make Resume
+                        Buy Premium
                     </button>
                 </div>
             </div>
