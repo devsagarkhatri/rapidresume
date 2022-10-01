@@ -18,6 +18,7 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
+  background,
 } from "@chakra-ui/react";
 import {
   FiHome,
@@ -26,6 +27,7 @@ import {
   FiStar,
   FiSettings,
   FiMenu,
+  FiRotateCcw,
 } from "react-icons/fi";
 import { IconType } from "react-icons";
 import { ReactText } from "react";
@@ -60,19 +62,23 @@ const LinkItems = [
   },
 ];
 
-export function SidebarClose({ children }) {
+export function SidebarClose({ children, isSidebarOpen, setIsSidebarOpen }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box
       minH="0vh"
       marginTop={"20px"}
+      width="25px"
+      maxW={"25px"}
       position={"relative"}
       bg={useColorModeValue("red.100", "gray.900")}
-      className="boxclose px-5"
+      className="boxclose px-0"
     >
-      <SidebarContent
+      <SidebarContentClose
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
       />
       <Drawer
         autoFocus={false}
@@ -86,8 +92,8 @@ export function SidebarClose({ children }) {
         <DrawerContent>
           <SidebarContentClose
             onClose={onClose}
-            isSidebarOpen={children.isSidebarOpen}
-            setIsSidebarOpen={children.setIsSidebarOpen}
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
           />
         </DrawerContent>
       </Drawer>
@@ -100,7 +106,7 @@ export function SidebarClose({ children }) {
   );
 }
 
-export function SidebarOpen({ children }) {
+export function SidebarOpen({ children, isSidebarOpen, setIsSidebarOpen }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box
@@ -140,10 +146,16 @@ export function SidebarOpen({ children }) {
   );
 }
 
-export function Sidebar(  ) {
+export function Sidebar({ children }) {
   let [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  return <SidebarOpen />;
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  return (
+    <SidebarClose
+      isSidebarOpen={isSidebarOpen}
+      setIsSidebarOpen={setIsSidebarOpen}
+    />
+  );
 }
 
 // interface SidebarProps extends BoxProps {
@@ -201,53 +213,64 @@ const SidebarContent = ({ onClose, ...rest }) => {
   );
 };
 
-const SidebarContentClose = ({ onClose, ...rest }) => {
+const SidebarContentClose = ({
+  onClose,
+  isSidebarOpen,
+  setIsSidebarOpen,
+  ...rest
+}) => {
   return (
     <Box
       bg={useColorModeValue("white", "gray.900")}
       borderRight="1px"
       borderRightColor={useColorModeValue("gray.200", "gray.700")}
       borderTopRightRadius={"50px"}
-      paddingStart={"8"}
-      w={{ base: "full", md: 60 }}
+      paddingTop={"35vh"}
+      margin="0px"
+      w={{ base: 20, md: 10 }}
       pos="fixed"
       minH={0}
       h="full"
       {...rest}
     >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold" as={"u"}>
-          Menu
-        </Text>
-        <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
+      {console.log(isSidebarOpen)}
+      <span
+        maxHeight={"100%"}
+        maxW={"80vh"}
+        style={{ transform: "rotate(0deg)" }}
+        className="d-flex flex-column justify-content-around"
+      >
+        {LinkItems.map((link) => (
+          //   <NavItem key={link.name} icon={link.icon}>
+
+          <h2
+            className="d-flex flex-row "
+            style={{
+              // minWidth: "max-content",
+              // paddingInline: "15px",
+              // justifySelf:"stretch",
+              transform: "rotate(-90deg)",
+            }}
+          >
+            <Icon as={link.icon} marginEnd={"10px"} />
+            <Box flex="1" textAlign="left">
+              {link.name}
+            </Box>
+          </h2>
+
+          //   </NavItem>
+        ))}
         <Text
           fontSize="2xl"
           fontFamily="monospace"
           fontWeight="bold"
-          onClick={() => rest.setIsSidebarOpen(!rest.isSidebarOpen)}
+          style={{ transform: "rotate(90deg)" }}
+          paddingInline="20px"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
-          x
+          Y
         </Text>
-      </Flex>
-      <Accordion>
-        {LinkItems.map((link) => (
-          //   <NavItem key={link.name} icon={link.icon}>
-          <AccordionItem border={"0px"} paddingTop={"5px"}>
-            <h2>
-              <AccordionButton
-                _expanded={{ borderBottom: "2px", borderBottomColor: "Black" }}
-                rotate={"90"}
-              >
-                <Icon as={link.icon} marginEnd={"10px"} />
-                <Box flex="1" textAlign="left">
-                  {link.name}
-                </Box>
-              </AccordionButton>
-            </h2>
-          </AccordionItem>
-          //   </NavItem>
-        ))}
-      </Accordion>
+      </span>
     </Box>
   );
 };
