@@ -5,19 +5,19 @@ const Navbar = () => {
     return (
         <div className="text-black  mx-20 absolute top-5 right-20 left-0 z-10 ">
             <div className="flex justify-between items-center px-3 py-2  ">
-                <a className="hover:cursor-pointer" href="">
+                <a className="hover:cursor-pointer" href="/home">
                     <img src={Logo} alt="logo" className="w-9 h-9" />
                 </a>
                 <div className="flex items-center justify-between  w-[35%] ">
                     <ul className="list-none flex flex-row gap-20 text-white ">
                         <li>
-                            <a href="">Features</a>
+                            <a href="/features">Features</a>
                         </li>
                         <li>
-                            <a href="">Pricing</a>
+                            <a href="/pricing">Pricing</a>
                         </li>
                         <li>
-                            <a href="">FAQ</a>
+                            <a href="/FAQ">FAQ</a>
                         </li>
                     </ul>
                     <button

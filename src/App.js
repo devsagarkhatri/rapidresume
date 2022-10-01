@@ -1,10 +1,10 @@
 import "./App.css";
-import Settings from "./components/Settings";
+import Signup from "./components/Signup";
 
 function App() {
     return (
         <>
-            <Settings />
+            <Signup />
         </>
     );
 }
