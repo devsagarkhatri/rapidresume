@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { useState } from "react";
 import {
   IconButton,
   Box,
@@ -11,15 +11,12 @@ import {
   DrawerContent,
   Text,
   useDisclosure,
-  BoxProps,
-  FlexProps,
   Accordion,
   AccordionButton,
-  AccordionIcon,
   AccordionItem,
   AccordionPanel,
-  background,
 } from "@chakra-ui/react";
+
 import {
   FiHome,
   FiTrendingUp,
@@ -27,11 +24,8 @@ import {
   FiStar,
   FiSettings,
   FiMenu,
-  FiRotateCcw,
 } from "react-icons/fi";
-import { IconType } from "react-icons";
-import { ReactText } from "react";
-import Background from "../background/Background";
+
 import "./sidebar.css";
 
 const LinkItems = [
@@ -153,7 +147,7 @@ export function Sidebar({ children }) {
   return (
     <SidebarClose
       isSidebarOpen={isSidebarOpen}
-      setIsSidebarOpen={setIsSidebarOpen}
+      setIsSidebarOpen={() => setIsSidebarOpen}
     />
   );
 }
@@ -225,20 +219,26 @@ const SidebarContentClose = ({
       borderRight="1px"
       borderRightColor={useColorModeValue("gray.200", "gray.700")}
       borderTopRightRadius={"50px"}
-      paddingTop={"35vh"}
-      margin="0px"
+      paddingTop={"75vh"}
+      marginTop="0px"
       w={{ base: 20, md: 10 }}
+      sx={{ overflow: "hidden" }}
       pos="fixed"
       minH={0}
       h="full"
+      onClick={() => setIsSidebarOpen(true)}
       {...rest}
     >
-      {console.log(isSidebarOpen)}
-      <span
-        maxHeight={"100%"}
-        maxW={"80vh"}
-        style={{ transform: "rotate(0deg)" }}
-        className="d-flex flex-column justify-content-around"
+      <div
+        maxHeight={"80%"}
+        // position={"fixed"}
+        style={{
+          transform: "rotate(-90deg)",
+          transformOrigin: "top left",
+
+          minWidth: "max-content",
+        }}
+        className="d-flex flex-row justify-content-around "
       >
         {LinkItems.map((link) => (
           //   <NavItem key={link.name} icon={link.icon}>
@@ -246,15 +246,17 @@ const SidebarContentClose = ({
           <h2
             className="d-flex flex-row "
             style={{
-              // minWidth: "max-content",
-              // paddingInline: "15px",
-              // justifySelf:"stretch",
-              transform: "rotate(-90deg)",
+              minWidth: "max-content",
+              paddingInline: "15px",
+              paddingTop: "8px",
+              borderRight: "1px solid black",
+              justifySelf: "stretch",
             }}
           >
             <Icon as={link.icon} marginEnd={"10px"} />
             <Box flex="1" textAlign="left">
               {link.name}
+              {isSidebarOpen}
             </Box>
           </h2>
 
@@ -268,9 +270,9 @@ const SidebarContentClose = ({
           paddingInline="20px"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
-          Y
+          X{isSidebarOpen}
         </Text>
-      </span>
+      </div>
     </Box>
   );
 };
