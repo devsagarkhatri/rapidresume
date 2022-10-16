@@ -1,5 +1,6 @@
 import React from "react";
 import Resumes from "./../../../../assets/resumes.png";
+import { Link } from "react-router-dom";
 
 const Introduction = () => {
     return (
@@ -13,13 +14,17 @@ const Introduction = () => {
                     Showcase yourself and your achievements with and impressive
                     resume made with the free online resume maker RapidResume
                 </p>
-                <div className="mx-0 mt-10 ">
-                    <button className="bg-gradient-to-t from-bgBlue to-sky-700 p-2 px-7 rounded-2xl mr-5 ">
-                        Login
-                    </button>
-                    <button className="bg-gradient-to-t from-bgBlue to-sky-700 p-2 px-7 rounded-2xl ml-5 ">
-                        Sign Up
-                    </button>
+                <div className="ml-0 mt-10 self-end mr-5 ">
+                    <Link to="/login">
+                        <button className="bg-gradient-to-t from-bgBlue to-sky-700 px-8 py-2 hover:text-white  rounded-2xl mr-5 ">
+                            Login
+                        </button>
+                    </Link>
+                    <Link to="signup">
+                        <button className="bg-gradient-to-t from-bgBlue to-sky-700 hover:text-white px-8 py-2 rounded-2xl ml-5 ">
+                            Sign Up
+                        </button>
+                    </Link>
                 </div>
             </div>
             <img
