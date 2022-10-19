@@ -1,13 +1,8 @@
 import React, { useState } from "react";
-import {
-    getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
-    createUserWithEmailAndPassword,
-} from "firebase/auth";
+import axios from "axios";
 import googleLogo from "../../../assets/google-logo.svg";
 import { useNavigate } from "react-router-dom";
-import { app } from "../../../firebase.config"; // important don't remove
+import { saveUser } from "../../../firebaseStorage/userData";
 import {
     Box,
     Flex,
@@ -33,6 +28,12 @@ import {
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import Blur from "../background/Blur";
+import {
+    GoogleAuthProvider,
+    getAuth,
+    signInWithPopup,
+    createUserWithEmailAndPassword,
+} from "firebase/auth";
 
 const avatars = [
     {
@@ -57,7 +58,8 @@ const avatars = [
     },
 ];
 
-export default function SignupComponent() {
+export default function SignupComponent(props) {
+    let auth = getAuth();
     let [showPassword, setShowPassword] = useState();
     let [userData, setUserData] = useState({
         firstName: "",
@@ -87,6 +89,7 @@ export default function SignupComponent() {
         }
     }
     let navigate = useNavigate();
+
     function submitUserData() {
         const filter = new RegExp(
             /^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/,
@@ -99,27 +102,35 @@ export default function SignupComponent() {
         } else if (userData.email === "" && !filter.test(userData.email)) {
             alert("Enter a valid Email");
         } else {
-            const auth = getAuth();
-
             createUserWithEmailAndPassword(
                 auth,
                 userData.email,
                 userData.password
             )
                 .then((userCredential) => {
-                    console.log(userCredential.user);
+                    // Signed in
+                    const user = userCredential.user;
+                    props.setUserIdFunction((prev) => {
+                        return {
+                            ...prev,
+                            id: user.uid,
+                        };
+                    });
+                    saveUser(user.uid);
                     navigate("/login");
                 })
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
-                    console.log(errorMessage, errorCode);
+                    if (errorCode === "auth/email-already-in-use") {
+                        alert("Email already in use");
+                        setUserData((prev) => ({ ...prev, email: "" }));
+                    }
                 });
         }
     }
     function signUpWithGmail() {
         let provider = new GoogleAuthProvider();
-        let auth = getAuth();
         signInWithPopup(auth, provider)
             .then((result) => {
                 const credential =

@@ -5,17 +5,17 @@ import Footer from "../../atoms/footer/Footer";
 import Blur from "../../atoms/background/Blur";
 import Background from "../../atoms/background/Background";
 
-const Login = () => {
-  return (
-    <>
-      <Background isCircle isgradient />
-      <Header />
-      <div className="container">
-        <LoginComponent />
-      </div>
-      <Footer />
-    </>
-  );
+const Login = (props) => {
+    return (
+        <>
+            <Background isCircle isgradient />
+            <Header />
+            <div className="container">
+                <LoginComponent setUserIdFunction={props.setUserIdFunction} />
+            </div>
+            <Footer />
+        </>
+    );
 };
 
 export default Login;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "../../../firebase.config"; // important don't remove
 import { useNavigate, Link as RouteLink } from "react-router-dom";
 import {
@@ -47,7 +47,7 @@ const avatars = [
     },
 ];
 
-export default function LoginComponent() {
+export default function LoginComponent(props) {
     let [showPassword, setShowPassword] = useState();
     let [loginData, setLoginData] = useState({ email: "", password: "" });
     function handleDataChange(event) {
@@ -57,31 +57,22 @@ export default function LoginComponent() {
     const navigate = useNavigate();
 
     function LoginUser() {
-        // let auth = getAuth();
-        // console.log();
-        // signInWithEmailAndPassword(auth, loginData.email, loginData.password)
-        //     .then((userCredential) => {
-        //         const user = userCredential.user;
-        //         console.log(user);
-        //         navigate("/dashboard");
-        //     })
-        //     .catch((error) => {
-        //         const errorCode = error.code;
-        //         const errorMessage = error.message;
-        //         console.log(errorCode, "->", errorMessage);
-        //     });
-
-        fetch("https://localhost:5000/login")
-            .then((response) => response.json())
+        let auth = getAuth();
+        console.log();
+        signInWithEmailAndPassword(auth, loginData.email, loginData.password)
             .then((userCredential) => {
                 const user = userCredential.user;
-                console.log(user);
-                navigate("/dashboard");
+                props.setUserIdFunction((prev) => ({
+                    ...prev,
+                    ["login"]: true,
+                }));
+                localStorage.setItem("userLoginStatus", JSON.stringify(true));
+                navigate(`/dashboard/user/${user.uid}`);
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                console.log(errorCode, "->", errorMessage);
+                console.log(errorCode, errorMessage);
             });
     }
     return (
