@@ -4,13 +4,16 @@ import { doc, setDoc, getDocs, collection, query } from "firebase/firestore";
 import { firestore } from "../firebase.config";
 let tempData = {
     id: "Pfcl0fv3faf55gZK99utheBEQQN2",
-    school: "samesamesamesamesamesame",
-    college: "samesamesamesamesamesame",
-    name: "samesamesame",
-    previousExperience: "samesamesamesamesamesamesame",
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    userJson: {
+        data: [],
+    },
 };
+
 export const saveUser = async (data) => {
-    console.log("happennig");
     await setDoc(doc(firestore, "users", data), tempData, {
         merge: true,
     });

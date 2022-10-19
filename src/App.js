@@ -1,24 +1,28 @@
 import "./App.css";
 import Background from "./components/atoms/background/Background";
 import Header from "./components/atoms/header/Header";
-import { Sidebar } from "./components/atoms/sidebar/Sidebar";
 import Login from "./components/molecule/login/Login";
 import Signup from "./components/molecule/signup/Signup";
 import PaymentsPage from "./components/molecule/paymentsPage/PaymentsPage";
 import Footer from "./components/atoms/footer/Footer";
 import LandingPage from "./components/atoms/landingPage/LandingPage";
 import { Routes, Route } from "react-router-dom";
-import Page from "./components/atoms/page/Page";
 import { useEffect, useState } from "react";
 import { getAllUsers } from "./firebaseStorage/userData";
-import { firestore } from "./firebase.config";
 import SharedResume from "./components/molecule/Dashboard/SharedResume";
 import EditableDashboard from "./components/molecule/Dashboard/EditableDashboard";
 
 function App() {
-    const uploadImage = async (event) => {};
+    // const uploadImage = async (event) => {};
     const [userId, setUserId] = useState({ login: false, id: "" });
-
+    const [tempData, setTempData] = useState([]);
+    let data = async () => {
+        let rawData = await fetch("/login");
+        let str = await rawData.json();
+        console.log(str);
+        setTempData(str);
+    };
+    console.log(tempData);
     const [allUsers, setAllUsers] = useState({});
     const fetchUserData = async () => {
         await getAllUsers()
@@ -27,9 +31,6 @@ function App() {
             })
             .catch((err) => console.log(err));
     };
-    fetch("/getData")
-        .then((response) => response.json())
-        .then((data) => console.log("JSON", data));
 
     useEffect(() => {
         fetchUserData();
@@ -42,12 +43,12 @@ function App() {
         } else {
             setUserId((prev) => ({ ...prev, login: status }));
         }
+        data();
     }, []);
     useEffect(() => {
-        console.log("user logged in");
         localStorage.setItem("userLoginStatus", JSON.stringify(userId.login));
     }, [userId]);
-    console.log(userId.login);
+
     return (
         <>
             <Background />

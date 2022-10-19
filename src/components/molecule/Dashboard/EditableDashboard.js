@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import Background from "../../atoms/background/Background";
 import Header from "../../atoms/header/Header";
 import { Sidebar } from "../../atoms/sidebar/Sidebar";
 import Page from "../../atoms/page/Page";
-import { useParams, useSearchParams } from "react-router-dom";
-import { stringify } from "postcss";
+import { useParams } from "react-router-dom";
+import Video from "../../atoms/video/Video";
 
 const EditableDashboard = ({ users }) => {
     // let [searchParams, setSearchParams] = useSearchParams();
@@ -17,11 +17,12 @@ const EditableDashboard = ({ users }) => {
         }
     }
     return (
-        <div>
+        <div className="relative">
             <Background isCircle={false} isgradient={true} />
             <Header />
             <Sidebar />
             <Page />
+            {/* <Video /> */}
         </div>
     );
 };
