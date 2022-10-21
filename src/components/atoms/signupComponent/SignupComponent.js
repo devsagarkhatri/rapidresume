@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
 import googleLogo from "../../../assets/google-logo.svg";
 import { useNavigate } from "react-router-dom";
 import { saveUser } from "../../../firebaseStorage/userData";
+import { app } from "../../../firebase.config";
 import {
     Box,
     Flex,
@@ -90,7 +90,7 @@ export default function SignupComponent(props) {
     }
     let navigate = useNavigate();
 
-    function submitUserData() {
+    async function submitUserData() {
         const filter = new RegExp(
             /^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/,
             "gm"
@@ -102,7 +102,7 @@ export default function SignupComponent(props) {
         } else if (userData.email === "" && !filter.test(userData.email)) {
             alert("Enter a valid Email");
         } else {
-            createUserWithEmailAndPassword(
+            await createUserWithEmailAndPassword(
                 auth,
                 userData.email,
                 userData.password

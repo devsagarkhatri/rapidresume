@@ -9,8 +9,8 @@ const PricingPlan = () => {
     let [paymentId, setPaymentId] = useState("");
     function razorPayFunction() {
         let options = {
-            key: "rzp_test_6J42IIpqj552cW",
-            key_secret: "xUbmnpNtoUo2lXU6wNclEiGT",
+            key: "rzp_test_38uGZyi4iVI499",
+            key_secret: "OXJEuGiezh15zbNUluleIzti",
             amount: 720 * 100,
             currency: "INR",
             name: "Premium Plan ",
@@ -31,8 +31,8 @@ const PricingPlan = () => {
                 color: "#6861D8",
             },
         };
-        const pay = new window.Razorpay(options);
-        pay.open();
+        // const pay = new window.Razorpay(options);
+        // pay.open();
     }
     return (
         <div className="flex flex-col rounded-2xl bg-no-repeat bg-contain mx-auto justify-around items-center p-5  relative">
@@ -120,7 +120,7 @@ const PricingPlan = () => {
                     <button
                         type="button"
                         className="p-3 px-5 text-[#459EFF] rounded-full bg-white"
-                        onClick={razorPayFunction}
+                        onClick={() => console.log("paid")}
                     >
                         Buy Premium
                     </button>

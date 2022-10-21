@@ -16,12 +16,12 @@ function App() {
     // const uploadImage = async (event) => {};
     const [userId, setUserId] = useState({ login: false, id: "" });
     const [tempData, setTempData] = useState([]);
-    let data = async () => {
-        let rawData = await fetch("/login");
-        let str = await rawData.json();
-        console.log("backend ->", str);
-        setTempData(str);
-    };
+    // let data = async () => {
+    //     let rawData = await fetch("/login");
+    //     let str = await rawData.json();
+    //     console.log("backend ->", str);
+    //     setTempData(str);
+    // };
     const [allUsers, setAllUsers] = useState({});
     const fetchUserData = async () => {
         await getAllUsers()
@@ -42,7 +42,6 @@ function App() {
         } else {
             setUserId((prev) => ({ ...prev, login: status }));
         }
-        data();
     }, []);
     useEffect(() => {
         localStorage.setItem("userLoginStatus", JSON.stringify(userId.login));
@@ -62,7 +61,7 @@ function App() {
                                 isgradient={true}
                             />
                             <Header />
-                            <PaymentsPage />
+                            {/* <PaymentsPage /> */}
                         </>
                     }
                 />

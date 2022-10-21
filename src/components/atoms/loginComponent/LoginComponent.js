@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { app } from "../../../firebase.config"; // important don't remove
+import { firebase, auth } from "../../../firebase.config"; // important don't remove
 import { useNavigate, Link as RouteLink } from "react-router-dom";
 import {
     Box,
