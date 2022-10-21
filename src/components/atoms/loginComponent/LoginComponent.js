@@ -57,22 +57,27 @@ export default function LoginComponent(props) {
     const navigate = useNavigate();
 
     function LoginUser() {
-        let auth = getAuth();
-        console.log();
-        signInWithEmailAndPassword(auth, loginData.email, loginData.password)
-            .then((userCredential) => {
-                const user = userCredential.user;
+        const payload = loginData;
+        fetch("/login", {
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            method: "POST",
+            body: JSON.stringify(payload),
+        })
+            .then(function (res) {
+                console.log("res from FE", res);
                 props.setUserIdFunction((prev) => ({
                     ...prev,
                     ["login"]: true,
                 }));
                 localStorage.setItem("userLoginStatus", JSON.stringify(true));
-                navigate(`/dashboard/user/${user.uid}`);
+                navigate(`/dashboard/user/${res.user.uid}`);
+                return res;
             })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log(errorCode, errorMessage);
+            .catch(function (res) {
+                console.log(res);
             });
     }
     return (

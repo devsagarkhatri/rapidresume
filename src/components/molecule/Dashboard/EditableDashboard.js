@@ -5,10 +5,9 @@ import { Sidebar } from "../../atoms/sidebar/Sidebar";
 import Page from "../../atoms/page/Page";
 import { useParams } from "react-router-dom";
 import Video from "../../atoms/video/Video";
+import Settings from "../../atoms/settings/Settings";
 
 const EditableDashboard = ({ users }) => {
-    // let [searchParams, setSearchParams] = useSearchParams();
-    // let [query, setQuery] = searchParams("");
     let { id } = useParams();
     let user;
     for (let u = 0; u < users.length; u++) {
@@ -22,7 +21,8 @@ const EditableDashboard = ({ users }) => {
             <Header />
             <Sidebar />
             <Page />
-            {/* <Video /> */}
+            <Settings />
+            <Video />
         </div>
     );
 };

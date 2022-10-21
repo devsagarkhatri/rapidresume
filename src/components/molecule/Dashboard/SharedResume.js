@@ -18,7 +18,6 @@ const SharedResume = ({ users }) => {
                 <>
                     {/* This is the sharable link and  Here the data can't be edited Maybe create a new component to diplay this data.  */}
                     <Background isCircle={false} isgradient={true} />
-                    <Header />
                     <Page />
                 </>
             ) : (

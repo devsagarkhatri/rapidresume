@@ -19,10 +19,9 @@ function App() {
     let data = async () => {
         let rawData = await fetch("/login");
         let str = await rawData.json();
-        console.log(str);
+        console.log("backend ->", str);
         setTempData(str);
     };
-    console.log(tempData);
     const [allUsers, setAllUsers] = useState({});
     const fetchUserData = async () => {
         await getAllUsers()

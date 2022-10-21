@@ -1,48 +1,40 @@
 import React, { useEffect, useRef, useState } from "react";
 // import { Cloudinary } from "@cloudinary/url-gen";
 import Axios from "axios";
+import Player from "./Player";
 
 const Video = () => {
     const [videoFile, setVideoFile] = useState(null);
     const [uploadStatus, setUploadStatus] = useState(false);
+    const [videoURL, setVideoURL] = useState("");
 
     // const cld = new Cloudinary({
     //     cloud: {
     //         cloudName: "rapid-resume",
     //     },
     // });
-    // let cloudinaryRef = useRef();
-    // let widgetRef = useRef();
-    // useEffect(() => {
-    //     cloudinaryRef.current = window.cloudinary;
-    //     widgetRef.current = cloudinaryRef.current.createUploadWidget(
-    //         {
-    //             cloudName: "rapid-resume",
-    //             uploadPresent: "rsoky1sw",
-    //         },
-    //         function (err, res) {
-    //             console.log(res);
-    //         }
-    //     );
-    // }, []);
-    // function addVideo() {
-    //     widgetRef.current.open();
-    // }
+
     function uploadVideo(event) {
         setVideoFile(event.target.files[0]);
     }
     function submitVideo() {
+        if (!videoFile) {
+            alert("Select a file before uploading");
+            return;
+        }
         let formData = new FormData();
         formData.append("file", videoFile);
         formData.append("upload_preset", "rsoky1sw");
-        console.log("happening");
         Axios.post(
-            "https://api.cloudinary.com/v1_1/rapid-resume/upload",
+            "https://api.cloudinary.com/v1_1/rapid-resume/video/upload",
             formData
-        )
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err));
-
+        ).then((res) => {
+            console.log(res);
+            setVideoURL(res.data.secure_url);
+            console.log("url", videoURL);
+            return;
+        });
+        // .catch((err) => console.log(err));
         setVideoFile(null);
         setUploadStatus(true);
         setTimeout(() => {
@@ -71,6 +63,7 @@ const Video = () => {
                     </button>
                 </div>
             )}
+            {videoURL.length > 0 && <Player src={videoURL} />}
         </>
     );
 };
