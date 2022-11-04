@@ -13,7 +13,7 @@ const UserInfoSection = ({
 }) => {
   return (
     <div className="pt-4 border-0 border-bottom  border-dark">
-      {/* {console.log("isPreview userinfo : " + isPreview)} */}
+      {/* {//console.log("isPreview userinfo : " + isPreview)} */}
       <UserName
         align={align}
         includeContacts={includeContacts}

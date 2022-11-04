@@ -78,7 +78,7 @@ export default function LoginComponent(props) {
     signInWithEmailAndPassword(auth, loginData.email, loginData.password)
       .then((res) => {
         findUser(res.user.uid).then(async (resDB) => {
-          console.log(resDB);
+          //console.log(resDB);
 
           jsCookies.setItem("userLoginStatus", JSON.stringify(true));
           jsCookies.setItem("user", JSON.stringify(res.user));
@@ -118,7 +118,7 @@ export default function LoginComponent(props) {
         }));
 
         findUser(result.user.uid).then(async (resDB) => {
-          console.log(resDB);
+          //console.log(resDB);
           user = await resDB;
           {
             (await resDB.data) && props.setContent(await resDB.data);
@@ -131,8 +131,8 @@ export default function LoginComponent(props) {
             isPremiumUser: user.isPremiumUser,
           }));
         });
-        console.log("email is a test >>>", user);
-        console.log("LoginData is a test >>>", props.loginData);
+        //console.log("email is a test >>>", user);
+        //console.log("LoginData is a test >>>", props.loginData);
 
         const { firstName, lastName } = userData;
         const { email } = user;
@@ -142,7 +142,7 @@ export default function LoginComponent(props) {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode, "->", errorMessage);
+        //console.log(errorCode, "->", errorMessage);
       });
   }
   return (

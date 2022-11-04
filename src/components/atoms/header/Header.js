@@ -46,7 +46,7 @@ export default function Header({ loginDetails, setLoginDetails }) {
         }));
         jsCookies.setItem("user", JSON.stringify({}));
         jsCookies.setItem("userLoginStatus", JSON.stringify({}));
-        console.log(updateUser(loginDetails.id, { login: false }));
+        //console.log(updateUser(loginDetails.id, { login: false }));
       })
       .catch((error) => {
         alert(error);
@@ -56,10 +56,7 @@ export default function Header({ loginDetails, setLoginDetails }) {
 
   return (
     <Box boxShadow={"sm"} className={"container"}>
-      {console.log(
-        "This is the login details in the header  >>> " +
-          JSON.stringify(loginDetails)
-      )}
+      
       <Flex
         color={useColorModeValue("white", "gray.600")}
         minH={"60px"}

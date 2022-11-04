@@ -13,11 +13,11 @@ const InlineEdit = ({
   const [editingValue, setEditingValue] = useState(value);
 
   const onChange = (event) => {
-    console.log("index > " + index);
-    console.log("localValue > " + event.target.value);
+    //console.log("index > " + index);
+    //console.log("localValue > " + event.target.value);
     setEditingValue(event.target.value);
     setValue(index, editingValue);
-    console.log("Value > " + value);
+    //console.log("Value > " + value);
   };
 
   const onKeyDown = (event) => {
@@ -34,8 +34,8 @@ const InlineEdit = ({
     }
     // setIsEditing(false);
   };
-  // console.log("value :- " + value);
-  // console.log("editingValue :- " + editingValue);
+  // //console.log("value :- " + value);
+  // //console.log("editingValue :- " + editingValue);
 
   if (isPreview) {
     return (

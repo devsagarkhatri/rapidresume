@@ -1,22 +1,21 @@
 import Page from "../../atoms/page/Page";
-import Header from "../../atoms/header/Header";
+
 import Background from "../../atoms/background/Background";
 import { findUser } from "../../../globals/config/firebaseStorage/userData";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 
 const Preview = ({ setPageRef }) => {
   let { userID } = useParams();
-  console.log("id -> ", userID);
+  //console.log("id -> ", userID);
   let [userData, setUserData] = useState();
 
   findUser(userID).then(async (res) => {
     let temp = await res;
-    console.log("await res", temp);
+    //console.log("await res", temp);
     await setUserData(await res);
-    console.log("userData -> ", userData.data);
+    //console.log("userData -> ", userData.data);
   });
-  
 
   return (
     <>

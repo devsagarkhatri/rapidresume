@@ -45,7 +45,7 @@ const Free_Theme1 = ({
 
   return (
     <>
-      {/* {console.log("isPreview : " + isPreview)} */}
+      {/* {//console.log("isPreview : " + isPreview)} */}
 
       {isVisible.userinfo && (
         <UserInfoSection

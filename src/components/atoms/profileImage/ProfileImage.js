@@ -12,16 +12,14 @@ const ProfileImage = (
   hasBorder = false
 ) => {
   let [imageData, setImageData] = useState(
-    jsCookies.getItem("image")
-      ? jsCookies.getItem("image")
-      : default_profile
+    jsCookies.getItem("image") ? jsCookies.getItem("image") : default_profile
   );
   function handleProfilePic(event) {
     if (event.target.files[0]) {
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
       reader.onload = () => {
-        console.log(reader.result);
+        //console.log(reader.result);
         reader.result
           ? jsCookies.setItem("image", reader.result)
           : jsCookies.removeItem("image");

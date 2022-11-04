@@ -15,16 +15,16 @@ const UserName = ({
   image = default_profile,
   headingColor = "#000",
   hasBorder = false,
-  isPreview=false,
+  isPreview = false,
   content,
 }) => {
   let [imageData, setImageData] = useState(image);
 
   return (
     <div className="d-flex flex-row">
-      {/* {console.log(content.contact)} */}
-      {/* {console.log("isPreview username : " + isPreview)} */}
-      { hasProfilePic && (
+      {/* {//console.log(content.contact)} */}
+      {/* {//console.log("isPreview username : " + isPreview)} */}
+      {hasProfilePic && (
         <ProfileImage
           setImage={setImageData}
           image={imageData}
@@ -63,11 +63,11 @@ const UserName = ({
         )}
         {includeContacts && !isProfessionVisible && (
           <div className="p-0 m-0 ">
-            <Contact isPreview={isPreview}
+            <Contact
+              isPreview={isPreview}
               align={alignContacts}
               headingColor={headingColor}
               content={content.contact}
-
             />
           </div>
         )}
@@ -79,7 +79,8 @@ const UserName = ({
               className={"text-align-" + align}
             />
 
-            <Contact isPreview={isPreview}
+            <Contact
+              isPreview={isPreview}
               align={alignContacts}
               headingColor={headingColor}
               content={content.contact}
@@ -92,4 +93,3 @@ const UserName = ({
 };
 
 export default UserName;
-

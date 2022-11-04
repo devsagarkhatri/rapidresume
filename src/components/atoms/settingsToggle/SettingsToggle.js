@@ -19,11 +19,11 @@ const SettingsToggle = ({ pageRef, exportJson, content, setContent }) => {
       var reader = new FileReader();
       reader.readAsText(event.target.files[0], "UTF-8");
       reader.onload = (e) => {
-        console.log(JSON.parse(e.target.result));
+        //console.log(JSON.parse(e.target.result));
         e.target.result
           ? setContent(JSON.parse(e.target.result))
           : console.log("");
-        console.log(content);
+        //console.log(content);
       };
     }
   }

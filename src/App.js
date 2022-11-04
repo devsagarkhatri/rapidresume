@@ -1,5 +1,5 @@
 import "./App.css";
-import { Provider } from "react-redux";
+
 
 import { Routes, Route } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
@@ -7,9 +7,6 @@ import jsCookies from "js-cookies";
 import Dashboard from "./components/molecule/dashboard/Dashboard";
 import Preview from "./components/molecule/preview/Preview";
 import LandingPage from "./components/molecule/landingPage/LandingPage";
-import Background from "./components/atoms/background/Background";
-import Header from "./components/atoms/header/Header";
-import SignupComponent from "./components/atoms/signupComponent/SignupComponent";
 import { getAllUsers } from "./globals/config/firebaseStorage/userData";
 import Login from "./components/molecule/login/Login";
 import Signup from "./components/molecule/signup/Signup";
