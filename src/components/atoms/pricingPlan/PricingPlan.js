@@ -5,7 +5,6 @@ import greenTick from "./../../../assets/greenTick.svg";
 import useParam from "react-router-dom";
 import { updateUser } from "../../../globals/config/firebaseStorage/userData";
 
-
 const PricingPlan = ({ id }) => {
   let [paymentId, setPaymentId] = useState("");
   function razorPayFunction() {
@@ -18,7 +17,7 @@ const PricingPlan = ({ id }) => {
       description: "premium plan for rapid resume",
       handler: function (response) {
         setPaymentId(response.razorpay_payment_id);
-        console.log("payment success", paymentId);
+        //console.log("payment success", paymentId);
       },
       prefill: {
         name: "samrat",
@@ -37,7 +36,10 @@ const PricingPlan = ({ id }) => {
     pay.open();
   }
   return (
-    <div id="pricing" className="flex flex-col rounded-2xl bg-no-repeat bg-contain mx-auto justify-around items-center p-5  relative">
+    <div
+      id="pricing"
+      className="flex flex-col rounded-2xl bg-no-repeat bg-contain mx-auto justify-around items-center p-5  relative"
+    >
       <h4 className="font-semibold mb-2">Pricing</h4>
       <h2 className="text-3xl font-bold mb-20 ">Choose the right plan</h2>
       <div className="flex justify-start items-center  ">

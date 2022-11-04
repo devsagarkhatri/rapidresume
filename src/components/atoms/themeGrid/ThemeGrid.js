@@ -7,20 +7,20 @@ const ThemeGrid = (props) => {
   let [ThemeGrid, setThemeGrid] = useState(
     props.isPremiumUser
       ? ThemeGridData
-      : ThemeGridData.filter((data) => data.isPremium == false)
+      : ThemeGridData.filter((data) => data.isPremium === false)
   );
 
   useEffect(() => {
     const palette = [];
     const width = 1;
-    // console.log(ThemeGridData);
+    // //console.log(ThemeGridData);
 
     const height = Math.ceil(ThemeGrid.length / width);
     for (let row = 0; row < height; row++) {
       const currentRow = ThemeGrid.slice(row * width, (row + 1) * width);
       palette.push(currentRow);
     }
-    // console.log(palette);
+    // //console.log(palette);
     setPalette(palette);
   }, []);
 
@@ -38,7 +38,7 @@ const ThemeGrid = (props) => {
       style={{ overflowX: "auto", maxHeight: "58vh" }}
     >
       {ThemeGrid &&
-        ThemeGrid.map((data,index) => {
+        ThemeGrid.map((data, index) => {
           return (
             <div
               key={index}

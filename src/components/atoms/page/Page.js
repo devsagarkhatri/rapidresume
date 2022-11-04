@@ -36,7 +36,7 @@ const Page = ({
 }) => {
   return (
     <div>
-      {/* {console.log(JSON.stringify(content))} */}
+      {/* {//console.log(JSON.stringify(content))} */}
       <Draggable>
         <div>
           <PageWrapper

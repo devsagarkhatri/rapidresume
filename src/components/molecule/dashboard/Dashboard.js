@@ -1,7 +1,7 @@
 import Page from "../../atoms/page/Page";
 import SettingsToggle from "../../atoms/settingsToggle/SettingsToggle";
 import Magnifier from "../../atoms/magnifier/Magnifier";
-import generatePDF from "../../atoms/generatePDF/generatePDF";
+
 import Background from "../../atoms/background/Background";
 import Header from "../../atoms/header/Header";
 import Sidebar from "../../atoms/sidebar/Sidebar";
@@ -26,10 +26,10 @@ const Dashboard = ({
   useEffect(() => {
     findUser(id).then(async (resDB) => {
       await setUser(resDB);
-      console.log("inner >>>>", user);
+      // //console.log("inner >>>>", user);
     });
-    console.log("outer >>>", user);
-  }, []);
+    // //console.log("outer >>>", user);
+  }, [id]);
 
   const setUserName = (i, userName) => {
     setContent((prev) => ({
@@ -265,7 +265,7 @@ const Dashboard = ({
   };
 
   const setVisible = (isVisible) => {
-    console.log(JSON.stringify(isVisible));
+    //console.log(JSON.stringify(isVisible));
     setContent((prev) => ({
       ...prev,
       isVisible: isVisible,
@@ -289,11 +289,6 @@ const Dashboard = ({
     document.body.removeChild(link);
     URL.revokeObjectURL(href);
   };
-
-  // const createPdf = () => {
-  //   console.log("Working");
-  //   generatePDF(pageRef);
-  // };
 
   return (
     <>

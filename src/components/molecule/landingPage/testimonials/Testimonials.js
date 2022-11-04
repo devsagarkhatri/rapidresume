@@ -1,8 +1,6 @@
 import React, { useRef } from "react";
 import review from "./../../../../assets/review.svg";
 import left from "./../../../../assets/left.svg";
-import user from "./../../../../assets/Picture.png";
-import userPicture from "./../../../../assets/Picture.png";
 
 import "./testimonials.css";
 const Testimonials = () => {

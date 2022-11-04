@@ -3,7 +3,7 @@ import jsCookies from "js-cookies";
 import googleLogo from "../../../assets/google-logo.svg";
 import { useNavigate } from "react-router-dom";
 import { saveUser } from "../../../globals/config/firebaseStorage/userData";
-import { app } from "../../../firebase.config";
+// import { app } from "../../../firebase.config";
 
 import {
   Box,
@@ -19,8 +19,6 @@ import {
   Avatar,
   AvatarGroup,
   useBreakpointValue,
-  IconProps,
-  Icon,
   HStack,
   FormControl,
   FormLabel,
@@ -29,7 +27,7 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import Blur from "../background/Blur";
+
 import {
   GoogleAuthProvider,
   getAuth,
@@ -117,7 +115,7 @@ export default function SignupComponent(props) {
             id: user.uid,
           }));
           const { email, displayName } = user;
-          console.log("User", email, displayName);
+          //console.log("User", email, displayName);
           const { firstName, lastName } = userData;
           saveUser(user.uid, {
             email,
@@ -132,7 +130,7 @@ export default function SignupComponent(props) {
         })
         .catch((error) => {
           const errorCode = error.code;
-          const errorMessage = error.message;
+          // const errorMessage = error.message;
           if (errorCode === "auth/email-already-in-use") {
             alert("Email already in use");
             setUserData((prev) => ({ ...prev, email: "" }));
@@ -145,9 +143,9 @@ export default function SignupComponent(props) {
     signInWithPopup(auth, provider)
       .then((result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
+        // const token = credential.accessToken;
         const user = result.user;
-        console.log("user from signup", user);
+        //console.log("user from signup", user);
         jsCookies.setItem("userLoginStatus", JSON.stringify(true));
         jsCookies.setItem("user", JSON.stringify(user));
         props.setLoginData((prev) => ({
@@ -166,7 +164,7 @@ export default function SignupComponent(props) {
           data: props.defaultData,
         });
         // setTimeout(() => {
-        //     console.log("updating....");
+        //     //console.log("updating....");
         //     updateUser(user.uid, {
 
         //     });
@@ -176,7 +174,7 @@ export default function SignupComponent(props) {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode, "->", errorMessage);
+        //console.log(errorCode, "->", errorMessage);
       });
   }
   return (
