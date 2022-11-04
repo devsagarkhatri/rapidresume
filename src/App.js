@@ -1,23 +1,287 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { Provider } from "react-redux";
 
+import { Routes, Route } from "react-router-dom";
+import { useRef, useState, useEffect } from "react";
+import jsCookies from "js-cookies";
+import Dashboard from "./components/molecule/dashboard/Dashboard";
+import Preview from "./components/molecule/preview/Preview";
+import LandingPage from "./components/molecule/landingPage/LandingPage";
+import Background from "./components/atoms/background/Background";
+import Header from "./components/atoms/header/Header";
+import SignupComponent from "./components/atoms/signupComponent/SignupComponent";
+import { getAllUsers } from "./globals/config/firebaseStorage/userData";
+import Login from "./components/molecule/login/Login";
+import Signup from "./components/molecule/signup/Signup";
+import Pricing from "./components/molecule/pricing/Pricing";
+import { updateUser } from "../src/globals/config/firebaseStorage/userData";
 function App() {
+  let [pageRef, setPageRef] = useState(useRef());
+
+  let contentData = {
+    userinfo: {
+      profileUrl: "",
+      name: "Trevor Doe ",
+      profession: "Software Engineer",
+      contact: {
+        email: "sagarisawesome@gmail.com",
+        phone: "11111111",
+        linkedin: "linkedin.com/sagarkhatri",
+        website: "thisisawesome.com",
+      },
+    },
+
+    experience: [
+      {
+        company: "Coding Ninjas",
+        designation: "Intern",
+        duration: "Jun 20 - Dec 20",
+      },
+      {
+        company: "Pepsi Fizz",
+        designation: "Sr. Software Engineer",
+        duration: "Jan 21- present",
+      },
+      {
+        company: "Pepsi Fizz",
+        designation: "Sr. Software Engineer",
+        duration: "Jan 21- present",
+      },
+      {
+        company: "Pepsi Fizz",
+        designation: "Sr. Software Engineer",
+        duration: "Jan 21- present",
+      },
+    ],
+
+    education: [
+      {
+        degree: "Masters of Computer Applications",
+        college: "MMMUT",
+        duration: "Sep 18 - Aug 21",
+        score: "CGPA 7.8",
+      },
+      {
+        degree: "Masters of Computer Applications",
+        college: "MMMUT",
+        duration: "Sep 18 - Aug 21",
+        score: "CGPA 7.8",
+      },
+      {
+        degree: "Masters of Computer Applications",
+        college: "MMMUT",
+        duration: "Sep 18 - Aug 21",
+        score: "CGPA 7.8",
+      },
+    ],
+
+    projects: [
+      {
+        name: "Rapid Resume",
+        description:
+          "A SaaS startup thattt lets you create your resume and show case it the world for free.",
+      },
+      {
+        name: "Rapid Resume",
+        description:
+          "A SaaS startup thattt lets you create your resume and show case it the world for free.",
+      },
+      {
+        name: "Rapid Resume",
+        description:
+          "A SaaS startup thattt lets you create your resume and show case it the world for free.",
+      },
+      {
+        name: "Rapid Resume",
+        description:
+          "A SaaS startup thattt lets you create your resume and show case it the world for free.",
+      },
+    ],
+
+    skills: {
+      csv: "Java, React, CSS, Python, OSGI model, Adobe Experience Manager",
+    },
+
+    config: {
+      fontSize: "smaller",
+      fontName: "'Arial', sans-serif",
+      headingColor: "#000",
+      theme: "Free_Theme1",
+      isPremiumUser: true,
+    },
+
+    isVisible: {
+      contact: true,
+      userinfo: true,
+      experience: true,
+      education: true,
+      projects: true,
+      skills: true,
+    },
+  };
+
+  let loginDetails = {
+    username: "undefined",
+    id: undefined,
+    email: undefined,
+    isLoggedin: false,
+    isPremiumUser: true,
+  };
+
+  let [content, setContent] = useState(contentData);
+  let [loginData, setLoginData] = useState(loginDetails);
+  let [videoData, setVideoData] = useState("");
+
+  useEffect(() => {
+    {
+      loginData.id &&
+        setInterval(() => {
+          updateUser(loginData.id, { data: content });
+        }, 10000);
+    }
+  }, [content]);
+
+  // useEffect(() => {
+  //   setContent((prev) => ({
+  //     ...prev,
+  //     config: {
+  //       ...prev.config,
+  //       isPremiumUser: loginData.isPremiumUser,
+  //     },
+  //   }));
+  // }, [loginData.isPremiumUser]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div ref={pageRef}>
+      {/* <Preview content={content} setPageRef={setPageRef} /> */}
+      {/* <Dashboard
+        content={content}
+        loginDetails={loginData}
+        pageRef={pageRef}
+        setContent={setContent}
+        setPageRef={setPageRef}
+        setLoginDetails={setLoginData}
+      /> */}
+      {/* <LandingPage/> */}
+
+      <Routes>
+        <Route
+          path="/payments"
+          element={
+            <>
+              {!loginData.isPremiumUser ? (
+                <Pricing
+                  loginDetails={loginData}
+                  setLoginDetails={setLoginData}
+                />
+              ) : (
+                <h1>
+                  <a href={"/dashboard/user/" + loginData.id}>
+                    You're a Premium User, Click to continue
+                  </a>
+                </h1>
+              )}
+            </>
+          }
+        />
+        {loginData.isLoggedin ? (
+          <>
+            <Route
+              path="/login"
+              element={
+                <Dashboard
+                  content={content}
+                  loginDetails={loginData}
+                  pageRef={pageRef}
+                  setContent={setContent}
+                  setPageRef={setPageRef}
+                  setLoginDetails={setLoginData}
+                />
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                <Dashboard
+                  content={content}
+                  loginDetails={loginData}
+                  pageRef={pageRef}
+                  setContent={setContent}
+                  setPageRef={setPageRef}
+                  setLoginDetails={setLoginData}
+                />
+              }
+            />
+          </>
+        ) : (
+          <>
+            <Route
+              path="/login"
+              element={
+                <Login
+                  setLoginData={setLoginData}
+                  loginData={loginData}
+                  setContent={setContent}
+                  setVideoData={setVideoData}
+                />
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                <Signup
+                  setLoginData={setLoginData}
+                  loginData={loginData}
+                  defaultData={contentData}
+                />
+              }
+            />
+          </>
+        )}
+        <Route path="/pricing" element={<Pricing />} />
+        {loginData.isLoggedin ? (
+          <>
+            <Route
+              path={"dashboard/user/:id"}
+              element={
+                <Dashboard
+                  content={content}
+                  loginDetails={loginData}
+                  pageRef={pageRef}
+                  setContent={setContent}
+                  setVideoData={setVideoData}
+                  setPageRef={setPageRef}
+                  setLoginDetails={setLoginData}
+                />
+              }
+            />
+          </>
+        ) : (
+          <Route
+            path="/dashboard/user/*"
+            element={
+              <h1>
+                <a href="/login">Login to Continue</a>
+              </h1>
+            }
+          />
+        )}
+        <Route
+          path="/dashboard/share/:userID"
+          element={<Preview setPageRef={setPageRef} />}
+        />
+        <Route
+          path="/"
+          element={
+            <>
+              <LandingPage
+                loginDetails={loginData}
+                setLoginDetails={setLoginData}
+              />
+            </>
+          }
+        />
+      </Routes>
     </div>
   );
 }
