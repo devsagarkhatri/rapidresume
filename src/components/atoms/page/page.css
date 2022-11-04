@@ -1,17 +1,18 @@
-body{
-    background:"red"
-}
+
 
 .page {
+    
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 0.5cm;
+    box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    overflow: hidden;
     background: white;
-        display: block;
-        margin: 0 auto;
-        margin-bottom: 0.5cm;
-        box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
-        border-radius: 10px;
     width: 21cm;
     height: 29.7cm;
     max-height: fit-content;
+    
 }
 
 /* div[size="A4"][layout="portrait"] {

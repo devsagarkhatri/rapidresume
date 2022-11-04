@@ -4,7 +4,7 @@ import Header from "../../atoms/header/Header";
 import Footer from "../../atoms/footer/Footer";
 import Blur from "../../atoms/background/Blur";
 
-const Signup = () => {
+const Signup = ({ setLoginData, loginData,defaultData }) => {
   return (
     <>
       <Blur
@@ -13,9 +13,9 @@ const Signup = () => {
         left={-10}
         style={{ filter: "blur(70px)" }}
       />
-      <Header />
+      <Header loginDetails={loginData} setLoginDetails={setLoginData} />
       <div className="container">
-        <SignupComponent />
+        <SignupComponent setLoginData={setLoginData} defaultData={defaultData }/>
       </div>
       <Footer />
     </>

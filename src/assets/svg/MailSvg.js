@@ -1,7 +1,7 @@
 import React from "react";
 import { Svg, Path, G, Polygon } from "@react-pdf/renderer";
 
-import getInlineStyles from "../../../jss/GlobalStyles";
+import getInlineStyles from "../../globals/styles/GlobalStyles";
 
 const MailSvg = ({ width, height, color }) => {
   return (

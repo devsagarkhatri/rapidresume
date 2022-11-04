@@ -1,3 +1,8 @@
+import jsCookies from "js-cookies";
+import { getAuth, signOut } from "firebase/auth";
+import { auth } from "../../../firebase.config";
+import { updateUser } from "../../../globals/config/firebaseStorage/userData";
+// import updateUser
 import {
   Box,
   Flex,
@@ -15,6 +20,7 @@ import {
   useBreakpointValue,
   useDisclosure,
   Image,
+  Tooltip,
 } from "@chakra-ui/react";
 import {
   HamburgerIcon,
@@ -23,13 +29,37 @@ import {
   ChevronRightIcon,
 } from "@chakra-ui/icons";
 import logo from "./../../../resources/images/logo_icon.png";
-import Background from "../background/Background";
+import { useNavigate, Navigate } from "react-router-dom";
 
-export default function Header() {
+export default function Header({ loginDetails, setLoginDetails }) {
   const { isOpen, onToggle } = useDisclosure();
+  const navigate = useNavigate();
+  const logOut = () => {
+    // const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        setLoginDetails((prev) => ({
+          ...prev,
+          email: undefined,
+          id: undefined,
+          isLoggedin: false,
+        }));
+        jsCookies.setItem("user", JSON.stringify({}));
+        jsCookies.setItem("userLoginStatus", JSON.stringify({}));
+        console.log(updateUser(loginDetails.id, { login: false }));
+      })
+      .catch((error) => {
+        alert(error);
+      });
+    navigate("/login");
+  };
 
   return (
     <Box boxShadow={"sm"} className={"container"}>
+      {console.log(
+        "This is the login details in the header  >>> " +
+          JSON.stringify(loginDetails)
+      )}
       <Flex
         color={useColorModeValue("white", "gray.600")}
         minH={"60px"}
@@ -53,9 +83,11 @@ export default function Header() {
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
           <Text
+            as="a"
             textAlign={useBreakpointValue({ base: "center", md: "left" })}
             fontFamily={"heading"}
             color={useColorModeValue("white", "gray.800")}
+            href={"/"}
           >
             <Image src={logo} maxHeight="25px" maxWidth={"auto"} />
           </Text>
@@ -65,39 +97,95 @@ export default function Header() {
           </Flex>
         </Flex>
 
-        <Stack
-          flex={{ base: 1, md: 0 }}
-          justify={"flex-end"}
-          direction={"row"}
-          spacing={6}
-        >
-          <Button
-            as={"a"}
-            fontSize={"sm"}
-            fontWeight={400}
-            variant={"link"}
-            color={"white"}
-            href={"#"}
+        {loginDetails && loginDetails.isLoggedin ? (
+          <Stack
+            flex={{ base: 1, md: 0 }}
+            justify={"flex-end"}
+            direction={"row"}
+            spacing={6}
           >
-            Sign Up
-          </Button>
-          <Button
-            display={{ base: "none", md: "inline-flex" }}
-            fontSize={"sm"}
-            fontWeight={400}
-            borderRadius={"50px"}
-            paddingLeft={"10"}
-            paddingRight={"10"}
-            color={"black"}
-            bg={"white"}
-            href={"#"}
-            _hover={{
-              bg: "white.100",
-            }}
+            <Button
+              as={"a"}
+              fontSize={"sm"}
+              fontWeight={400}
+              variant={"link"}
+              color={"white"}
+              href={"/dashboard/user/:" + loginDetails}
+            >
+              Dashboard
+            </Button>
+            <Tooltip
+              label={
+                loginDetails.isPremiumUser ? "Premium User" : "Normal User"
+              }
+              hasArrow
+              arrowSize={15}
+            >
+              <Button
+                as={"a"}
+                fontSize={"sm"}
+                fontWeight={400}
+                variant={"link"}
+                color={"white"}
+                href={"#"}
+              >
+                {loginDetails.email}
+              </Button>
+            </Tooltip>
+            <Button
+              display={{ base: "none", md: "inline-flex" }}
+              fontSize={"sm"}
+              fontWeight={400}
+              borderRadius={"50px"}
+              paddingLeft={"10"}
+              paddingRight={"10"}
+              color={"black"}
+              bg={"white"}
+              href={"#"}
+              _hover={{
+                bg: "white.100",
+              }}
+              onClick={(e) => logOut()}
+            >
+              Logout
+            </Button>
+          </Stack>
+        ) : (
+          <Stack
+            flex={{ base: 1, md: 0 }}
+            justify={"flex-end"}
+            direction={"row"}
+            spacing={6}
           >
-            Login
-          </Button>
-        </Stack>
+            <Button
+              as={"a"}
+              fontSize={"sm"}
+              fontWeight={400}
+              variant={"link"}
+              color={"white"}
+              href={"/signup"}
+            >
+              Sign Up
+            </Button>
+            <Button
+              as={"a"}
+              display={{ base: "none", md: "inline-flex" }}
+              fontSize={"sm"}
+              fontWeight={400}
+              borderRadius={"50px"}
+              paddingLeft={"10"}
+              paddingRight={"10"}
+              color={"black"}
+              bg={"white"}
+              href={"/login"}
+              _hover={{
+                bg: "white.100",
+              }}
+            >
+              Login
+            </Button>
+          </Stack>
+        )}
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>
@@ -263,10 +351,10 @@ const MobileNavItem = ({ label, children, href }) => {
 const NAV_ITEMS = [
   {
     label: "Features",
-    href: "#",
+    href: "/#features",
   },
   {
     label: "Pricing",
-    href: "#",
+    href: "/#pricing",
   },
 ];

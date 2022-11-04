@@ -19,89 +19,103 @@ import {
 
 import {
   FiHome,
-  FiTrendingUp,
-  FiCompass,
-  FiStar,
-  FiSettings,
+  FiEdit3,
+  FiGrid,
+  FiYoutube,
+  FiType,
+  FiLayout,
   FiMenu,
 } from "react-icons/fi";
-
+import Fonts from "../fonts/Fonts";
 import "./sidebar.css";
+import Headings from "../headings/Headings";
+import Section from "../section/Section";
+import ThemeGrid from "../themeGrid/ThemeGrid";
+import Video from "../video/Video";
 
-const LinkItems = [
-  {
-    name: "Fonts",
-    icon: FiHome,
-    data: "Lorem ipsum dolor sit amet, ",
-  },
-  {
-    name: "Headings",
-    icon: FiTrendingUp,
-    data: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, ",
-  },
-  {
-    name: "Sections",
-    icon: FiCompass,
-    data: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
-  },
-  {
-    name: "Section Order",
-    icon: FiStar,
-    data: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Utenim ad minim veniam",
-  },
-  {
-    name: "Themes",
-    icon: FiSettings,
-    data: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Utenim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
-  },
-];
-
-export function SidebarClose({ children, isSidebarOpen, setIsSidebarOpen }) {
+export function SidebarOpen({
+  children,
+  isPremiumUser,
+  isSidebarOpen,
+  setIsSidebarOpen,
+  setVideoData,
+  id,
+  zIndex = 5,
+  setFontSize,
+  setFontName,
+  setHeadingColor,
+  setVisible,
+  isVisible,
+  setTheme,
+  exportJson,
+  createPDF,
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  return (
-    <Box
-      minH="0vh"
-      marginTop={"20px"}
-      width="25px"
-      maxW={"25px"}
-      position={"relative"}
-      bg={useColorModeValue("red.100", "gray.900")}
-      className="boxclose px-0"
-    >
-      <SidebarContentClose
-        onClose={() => onClose}
-        display={{ base: "none", md: "block" }}
-        isSidebarOpen={isSidebarOpen}
-        setIsSidebarOpen={setIsSidebarOpen}
-      />
-      <Drawer
-        autoFocus={false}
-        isOpen={isOpen}
-        placement="left"
-        onClose={onClose}
-        returnFocusOnClose={false}
-        onOverlayClick={onClose}
-        size="full"
-      >
-        <DrawerContent>
-          <SidebarContentClose
-            onClose={onClose}
-            isSidebarOpen={isSidebarOpen}
-            setIsSidebarOpen={setIsSidebarOpen}
-          />
-        </DrawerContent>
-      </Drawer>
-      {/* mobilenav */}
-      <MobileNav display={{ base: "flex", md: "none" }} onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
-        {children}
-      </Box>
-    </Box>
-  );
-}
+  const LinkItemsFree = [
+    {
+      name: "Fonts",
+      icon: FiType,
+      data: <Fonts setFontSize={setFontSize} setFontName={setFontName} />,
+    },
+    {
+      name: "Headings",
+      icon: FiEdit3,
+      data: <Headings setHeadingColor={setHeadingColor} />,
+    },
+    {
+      name: "Sections",
+      icon: FiGrid,
+      data: <Section isVisible={isVisible} setVisible={setVisible} />,
+    },
+    // {
+    //   name: "Section Order",
+    //   icon: FiStar,
+    //   data: "hello",
+    // },
+    {
+      name: "Themes",
+      icon: FiLayout,
+      data: <ThemeGrid setTheme={setTheme} isPremiumUser={isPremiumUser} />,
+    },
+  ];
 
-export function SidebarOpen({ children, isSidebarOpen, setIsSidebarOpen }) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const LinkItemsPremium = [
+    {
+      name: "Fonts",
+      icon: FiType,
+      data: <Fonts setFontSize={setFontSize} setFontName={setFontName} />,
+    },
+    {
+      name: "Headings",
+      icon: FiEdit3,
+      data: <Headings setHeadingColor={setHeadingColor} />,
+    },
+    {
+      name: "Sections",
+      icon: FiGrid,
+      data: <Section isVisible={isVisible} setVisible={setVisible} />,
+    },
+    // {
+    //   name: "Section Order",
+    //   icon: FiStar,
+    //   data: "hello",
+    // },
+
+    {
+      name: "Video Options",
+      icon: FiYoutube,
+      data: <Video setVideoData={setVideoData} id={ id}/>,
+    },
+
+    {
+      name: "Themes",
+      icon: FiLayout,
+      data: <ThemeGrid setTheme={setTheme} isPremiumUser={isPremiumUser} />,
+    },
+  ];
+
+  let LinkItems = isPremiumUser ? LinkItemsPremium : LinkItemsFree;
+
   return (
     <Box
       minH="0vh"
@@ -109,10 +123,12 @@ export function SidebarOpen({ children, isSidebarOpen, setIsSidebarOpen }) {
       position={"relative"}
       bg={useColorModeValue("gray.100", "gray.900")}
       className="boxthis"
+      zIndex={zIndex}
     >
       <SidebarContent
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}
+        LinkItems={LinkItems}
       />
       <Drawer
         autoFocus={false}
@@ -126,8 +142,10 @@ export function SidebarOpen({ children, isSidebarOpen, setIsSidebarOpen }) {
         <DrawerContent>
           <SidebarContent
             onClose={onClose}
-            isSidebarOpen={children.isSidebarOpen}
-            setIsSidebarOpen={children.setIsSidebarOpen}
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+            LinkItems={LinkItems}
+            exportJson={exportJson}
           />
         </DrawerContent>
       </Drawer>
@@ -140,30 +158,46 @@ export function SidebarOpen({ children, isSidebarOpen, setIsSidebarOpen }) {
   );
 }
 
-export function Sidebar({ children }) {
+export default function Sidebar({
+  children,
+  isPremiumUser,
+  id,
+  setFontSize,
+  setFontName,
+  setHeadingColor,
+  setVideoData,
+  isVisible,
+  setVisible,
+  setTheme,
+}) {
   let [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <SidebarClose
+    <SidebarOpen
       isSidebarOpen={isSidebarOpen}
+      id={id}
       setIsSidebarOpen={() => setIsSidebarOpen}
+      setFontSize={setFontSize}
+      setFontName={setFontName}
+      setHeadingColor={setHeadingColor}
+      setVideoData={setVideoData}
+      isVisible={isVisible}
+      setVisible={setVisible}
+      setTheme={setTheme}
+      isPremiumUser={isPremiumUser}
     />
   );
 }
 
-// interface SidebarProps extends BoxProps {
-//   onClose: () => void;
-// }
-
-const SidebarContent = ({ onClose, ...rest }) => {
+const SidebarContent = ({ onClose, LinkItems, ...rest }) => {
   return (
     <Box
       bg={useColorModeValue("white", "gray.900")}
       borderRight="1px"
       borderRightColor={useColorModeValue("gray.200", "gray.700")}
       borderTopRightRadius={"50px"}
-      paddingStart={"8"}
+      paddingStart={"2"}
       w={{ base: "full", md: 60 }}
       pos="fixed"
       minH={0}
@@ -175,19 +209,18 @@ const SidebarContent = ({ onClose, ...rest }) => {
           Menu
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
-        <Text
+        {/* <Text
           fontSize="2xl"
           fontFamily="monospace"
           fontWeight="bold"
           onClick={() => rest.setIsSidebarOpen(!rest.isSidebarOpen)}
         >
           x
-        </Text>
+        </Text> */}
       </Flex>
       <Accordion allowToggle>
-        {LinkItems.map((link) => (
-          //   <NavItem key={link.name} icon={link.icon}>
-          <AccordionItem border={"0px"} paddingTop={"5px"}>
+        {LinkItems.map((link, index) => (
+          <AccordionItem border={"0px"} paddingTop={"5px"} key={index}>
             <h2>
               <AccordionButton
                 _expanded={{ borderBottom: "2px", borderBottomColor: "Black" }}
@@ -200,7 +233,6 @@ const SidebarContent = ({ onClose, ...rest }) => {
             </h2>
             <AccordionPanel color={"black"}>{link.data}</AccordionPanel>
           </AccordionItem>
-          //   </NavItem>
         ))}
       </Accordion>
     </Box>
@@ -211,6 +243,7 @@ const SidebarContentClose = ({
   onClose,
   isSidebarOpen,
   setIsSidebarOpen,
+  LinkItems,
   ...rest
 }) => {
   return (
@@ -230,12 +263,11 @@ const SidebarContentClose = ({
       {...rest}
     >
       <div
-        maxHeight={"80%"}
         // position={"fixed"}
         style={{
           transform: "rotate(-90deg)",
           transformOrigin: "top left",
-
+          maxHeight: "80%",
           minWidth: "max-content",
         }}
         className="d-flex flex-row justify-content-around "
@@ -245,6 +277,7 @@ const SidebarContentClose = ({
 
           <h2
             className="d-flex flex-row "
+            key={link.name}
             style={{
               minWidth: "max-content",
               paddingInline: "15px",
@@ -277,49 +310,6 @@ const SidebarContentClose = ({
   );
 };
 
-// interface NavItemProps extends FlexProps {
-//   icon: IconType;
-//   children: ReactText;
-// }
-const NavItem = ({ icon, children, ...rest }) => {
-  return (
-    <Link
-      href="#"
-      style={{ textDecoration: "none" }}
-      _focus={{ boxShadow: "none" }}
-    >
-      <Flex
-        align="center"
-        p="4"
-        mx="4"
-        borderRadius="lg"
-        role="group"
-        cursor="pointer"
-        _hover={{
-          bg: "cyan.400",
-          color: "white",
-        }}
-        {...rest}
-      >
-        {icon && (
-          <Icon
-            mr="4"
-            fontSize="16"
-            _groupHover={{
-              color: "white",
-            }}
-            as={icon}
-          />
-        )}
-        {children}
-      </Flex>
-    </Link>
-  );
-};
-
-// interface MobileProps extends FlexProps {
-//   onOpen: () => void;
-// }
 const MobileNav = ({ onOpen, ...rest }) => {
   return (
     <Flex

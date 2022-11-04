@@ -1,69 +1,209 @@
-import React from 'react';
-import { Icon } from '@chakra-ui/react';
+import { HStack, List, ListItem, UnorderedList } from "@chakra-ui/react";
+import React from "react";
+import InlineEdit from "../inlineEdit/InlineEdit";
+import {
+  
+  AddIcon,
+  MinusIcon,
+  EmailIcon,
+  PhoneIcon,
+  AtSignIcon,
+  ExternalLinkIcon,
+} from "@chakra-ui/icons";
+import "./contact.css";
 
-
-import ViewContainer from '../viewContainer/ViewContainer';
-import Link from '../link/Link';
-import Text from '../text/Text';
-
-import LinkedInSvg from "../../../assets/svg/LinkedInSvg";
-import MailSvg from "../../../assets/svg/MailSvg";
-import InstagramSvg from "../../../assets/svg/InstagramSvg";
-import GithubSvg from "../../../assets/svg/GithubSvg";
-import PhoneSvg from "../../../assets/svg/PhoneSvg";
-
-const Contact = ({ icon, text, url, isLastElement, platform }) => {
-  let fullURL = `${url}${text}`;
-  if (icon === "mail") {
-    fullURL = `mailto:${text}`;
+const Contact = ({
+  align = "center",
+  hasIcons = true,
+  headingColor = "black",
+  isPreview = "false",
+  content = { email: "", phone: "", linkedin: "", website: "" },
+}) => {
+  if (align == "right") {
+    return (
+      <div className={"d-flex flex-column col align-items-" + align}>
+        {console.log(" this is " + content.email)}
+        <List>
+          <ListItem className="align-items-right">
+            <InlineEdit
+              isPreview={isPreview}
+              value={content.email}
+              className={"text-align-" + align}
+              maxLength={25}
+            />
+            {hasIcons && (
+              <EmailIcon mt={0} ml={3} color={headingColor} rounded="full" />
+            )}
+          </ListItem>
+          <ListItem className={"text-align-right"}>
+            <InlineEdit
+              isPreview={isPreview}
+              value={content.phone}
+              type={"tel"}
+              className={"border-2 text-align-" + align}
+            />
+            {hasIcons && (
+              <PhoneIcon mt={0} ml={3} color={headingColor} rounded="full" />
+            )}
+          </ListItem>
+          <ListItem className={"text-align-right"}>
+            <InlineEdit
+              isPreview={isPreview}
+              value={content.linkedin}
+              className={"text-align-" + align}
+            />
+            {hasIcons && (
+              <AtSignIcon mt={0} ml={3} color={headingColor} rounded="full" />
+            )}
+          </ListItem>
+          <ListItem className={"text-align-right"}>
+            <InlineEdit
+              isPreview={isPreview}
+              value={content.website}
+              className={"text-align-" + align}
+            />
+            {hasIcons && (
+              <ExternalLinkIcon
+                mt={0}
+                ml={3}
+                color={headingColor}
+                rounded="full"
+              />
+            )}
+          </ListItem>
+        </List>
+      </div>
+    );
+  } else if (align == "center") {
+    return (
+      <div className={"d-flex flex-column col px-3 align-items-" + align}>
+        <List>
+          <HStack>
+            <ListItem className="d-flex justify-content-center">
+              {hasIcons && (
+                <EmailIcon
+                  mt={0}
+                  ml={1}
+                  mr={2}
+                  color={headingColor}
+                  rounded="full"
+                />
+              )}
+              <InlineEdit
+                isPreview={isPreview}
+                value={content.email}
+                className={""}
+              />
+            </ListItem>
+            <ListItem className="d-flex justify-content-center">
+              {hasIcons && (
+                <PhoneIcon
+                  mt={0}
+                  ml={1}
+                  mr={2}
+                  color={headingColor}
+                  rounded="full"
+                />
+              )}
+              <InlineEdit
+                isPreview={isPreview}
+                value={content.phone}
+                className={""}
+                type="tel"
+              />
+            </ListItem>
+            <ListItem className="d-flex justify-content-center">
+              {hasIcons && (
+                <AtSignIcon
+                  mt={0}
+                  ml={1}
+                  mr={2}
+                  color={headingColor}
+                  rounded="full"
+                />
+              )}
+              <InlineEdit
+                isPreview={isPreview}
+                value={content.linkedin}
+                className={""}
+              />
+            </ListItem>
+            <ListItem className="d-flex justify-content-center">
+              {hasIcons && (
+                <ExternalLinkIcon
+                  mt={0}
+                  ml={1}
+                  mr={2}
+                  color={headingColor}
+                  rounded="full"
+                />
+              )}
+              <InlineEdit
+                isPreview={isPreview}
+                value={content.website}
+                className={""}
+              />
+            </ListItem>
+          </HStack>
+        </List>
+        <br />
+      </div>
+    );
   }
-
-  const containerStyles = {
-    ...getInlineStyles("contactOption"),
-  };
-
-  if (isLastElement) {
-    containerStyles.marginBottom = 0;
-  }
-
-  const PDFIcon = () => {
-    if (icon === "linkedin") {
-      return <LinkedInSvg />;
-    } else if (icon === "github") {
-      return <GithubSvg />;
-    } else if (icon === "instagram") {
-      return <InstagramSvg />;
-    } else if (icon === "phone") {
-      return <PhoneSvg />;
-    } else {
-      return <MailSvg />;
-    }
-  };
-
   return (
-    <ViewContainer platform={platform} style={containerStyles}>
-      {platform === "pdf" ? (
-        <PDFIcon />
-      ) : (
-        <Icon style={getInlineStyles("contactIcon")} name={icon} />
-      )}
-      {icon === "phone" ? (
-        <Text
-          platform={platform}
-          style={{ ...getInlineStyles("contactInfo"), textDecoration: "none" }}
-        >
-          {text}
-        </Text>
-      ) : (
-        <Link
-          platform={platform}
-          href={fullURL}
-          style={getInlineStyles("contactInfo")}
-        >
-          {text}
-        </Link>
-      )}
-    </ViewContainer>
+    <div className={"d-flex flex-column col pr-3 align-items-" + align}>
+      <List>
+        <ListItem>
+          {hasIcons && (
+            <EmailIcon mt={0} mr={3} color={headingColor} rounded="full" />
+          )}
+          <InlineEdit
+            isPreview={isPreview}
+            value={content.email}
+            className={""}
+          />
+        </ListItem>
+        <ListItem>
+          {hasIcons && (
+            <PhoneIcon mt={0} mr={3} color={headingColor} rounded="full" />
+          )}
+          <InlineEdit
+            isPreview={isPreview}
+            value={content.phone}
+            className={""}
+            type="tel"
+          />
+        </ListItem>
+        <ListItem>
+          {hasIcons && (
+            <AtSignIcon mt={0} mr={3} color={headingColor} rounded="full" />
+          )}
+          <InlineEdit
+            isPreview={isPreview}
+            value={content.linkedin}
+            className={""}
+            maxLength={25}
+            type="email"
+          />
+        </ListItem>
+        <ListItem>
+          {hasIcons && (
+            <ExternalLinkIcon
+              mt={0}
+              mr={3}
+              color={headingColor}
+              rounded="full"
+            />
+          )}
+          <InlineEdit
+            isPreview={isPreview}
+            value={content.website}
+            className={""}
+            maxLength={25}
+          />
+        </ListItem>
+      </List>
+    </div>
   );
 };
 

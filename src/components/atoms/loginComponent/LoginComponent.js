@@ -1,11 +1,25 @@
 import React, { useState } from "react";
-
+import jsCookies from "js-cookies";
+import googleLogo from "../../../assets/google-logo.svg";
+import {
+  saveUser,
+  findUser,
+} from "../../../globals/config/firebaseStorage/userData";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { firebase, auth } from "../../../firebase.config"; // important don't remove
+import { useNavigate, Link as RouteLink } from "react-router-dom";
 import {
   Box,
   Flex,
   Stack,
   Heading,
   Text,
+  Image,
   Container,
   Input,
   Button,
@@ -13,9 +27,6 @@ import {
   Avatar,
   AvatarGroup,
   useBreakpointValue,
-  IconProps,
-  Icon,
-  HStack,
   FormControl,
   FormLabel,
   InputGroup,
@@ -48,8 +59,92 @@ const avatars = [
   },
 ];
 
-export default function LoginComponent() {
+export default function LoginComponent(props) {
   let [showPassword, setShowPassword] = useState();
+  let [loginData, setLoginData] = useState({ email: "", password: "" });
+  let [userData, setUserData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+  function handleDataChange(event) {
+    let { name, value } = event.target;
+    setLoginData((prev) => ({ ...prev, [name]: value }));
+  }
+  const navigate = useNavigate();
+
+  function LoginUser() {
+    signInWithEmailAndPassword(auth, loginData.email, loginData.password)
+      .then((res) => {
+        findUser(res.user.uid).then(async (resDB) => {
+          console.log(resDB);
+
+          jsCookies.setItem("userLoginStatus", JSON.stringify(true));
+          jsCookies.setItem("user", JSON.stringify(res.user));
+          {
+            props.setContent(resDB.data);
+          }
+          props.setLoginData((prev) => ({
+            userName: resDB.email,
+            id: res.user.uid,
+            isLoggedin: true,
+            email: resDB.email,
+            isPremiumUser: resDB.premium,
+          }));
+        });
+
+        navigate(`/dashboard/user/${res.user.uid}`);
+        // setTimeout(() => {
+        //     console.log("updating....");
+        //     updateUser(res.user.uid, { firstName: "here" });
+        // }, 1000);
+      })
+      .catch((err) => console.log(err));
+  }
+  function signInWithGmail() {
+    let provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        const user = result.user;
+        jsCookies.setItem("userLoginStatus", JSON.stringify(true));
+        jsCookies.setItem("user", JSON.stringify(user));
+        props.setLoginData((prev) => ({
+          ...prev,
+          isLoggedin: true,
+          id: user.uid,
+        }));
+
+        findUser(result.user.uid).then(async (resDB) => {
+          console.log(resDB);
+          user = await resDB;
+          {
+            (await resDB.data) && props.setContent(await resDB.data);
+          }
+          props.setLoginData((prev) => ({
+            userName: user.email,
+            id: result.user.uid,
+            isLoggedin: true,
+            email: user.email,
+            isPremiumUser: user.isPremiumUser,
+          }));
+        });
+        console.log("email is a test >>>", user);
+        console.log("LoginData is a test >>>", props.loginData);
+
+        const { firstName, lastName } = userData;
+        const { email } = user;
+
+        navigate(`/dashboard/user/${user.uid}`);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, "->", errorMessage);
+      });
+  }
   return (
     <Box position={"relative"}>
       <Container
@@ -62,7 +157,12 @@ export default function LoginComponent() {
         <Stack spacing={{ base: 10, md: 20 }}>
           <Heading
             lineHeight={1.1}
-            fontSize={{ base: "3xl", sm: "4xl", md: "5xl", lg: "6xl" }}
+            fontSize={{
+              base: "3xl",
+              sm: "4xl",
+              md: "5xl",
+              lg: "6xl",
+            }}
           >
             Students, Interns{" "}
             <Text
@@ -110,8 +210,14 @@ export default function LoginComponent() {
               bg={"gray.800"}
               color={"white"}
               rounded={"full"}
-              width={useBreakpointValue({ base: "44px", md: "60px" })}
-              height={useBreakpointValue({ base: "44px", md: "60px" })}
+              width={useBreakpointValue({
+                base: "44px",
+                md: "60px",
+              })}
+              height={useBreakpointValue({
+                base: "44px",
+                md: "60px",
+              })}
               position={"relative"}
               _before={{
                 content: '""',
@@ -160,11 +266,36 @@ export default function LoginComponent() {
             <Stack spacing={4}>
               <FormControl id="email">
                 <FormLabel>Email address</FormLabel>
-                <Input type="email" />
+                <Input
+                  paddingX="6px"
+                  name="email"
+                  value={loginData.email}
+                  onChange={handleDataChange}
+                  type="email"
+                />
               </FormControl>
               <FormControl id="password">
                 <FormLabel>Password</FormLabel>
-                <Input type="password" />
+
+                <InputGroup>
+                  <Input
+                    name="password"
+                    paddingX="6px"
+                    value={loginData.password}
+                    onChange={handleDataChange}
+                    type={showPassword ? "text" : "password"}
+                  />
+                  <InputRightElement h={"full"}>
+                    <Button
+                      variant={"ghost"}
+                      onClick={() =>
+                        setShowPassword((showPassword) => !showPassword)
+                      }
+                    >
+                      {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
               </FormControl>
               <Stack spacing={10}>
                 <Stack
@@ -180,6 +311,7 @@ export default function LoginComponent() {
                   _hover={{
                     bg: "blue.500",
                   }}
+                  onClick={LoginUser}
                 >
                   Sign in
                 </Button>
@@ -187,8 +319,30 @@ export default function LoginComponent() {
             </Stack>
             <Stack pt={6}>
               <Text align={"center"}>
-                A new user? <Link color={"blue.400"}>Sign Up</Link>
+                A new user?{" "}
+                <Link href="signup" color={"blue.400"}>
+                  Sign Up
+                </Link>
               </Text>
+            </Stack>
+            <Stack spacing={10} pt={5}>
+              <Button
+                loadingText="Submitting"
+                size="lg"
+                bg={"white"}
+                color={"blue.500"}
+                shadow="lg"
+                _hover={{
+                  shadow: "xl",
+                }}
+                marginBottom="15px"
+                border="2px"
+                borderColor="gray.200"
+                padding="6"
+              >
+                <Image src={googleLogo} alt="logo og google" mr="3" /> Sign in
+                with Google
+              </Button>
             </Stack>
           </Box>
         </Stack>

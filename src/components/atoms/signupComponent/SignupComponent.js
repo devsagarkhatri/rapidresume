@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+import jsCookies from "js-cookies";
+import googleLogo from "../../../assets/google-logo.svg";
+import { useNavigate } from "react-router-dom";
+import { saveUser } from "../../../globals/config/firebaseStorage/userData";
+import { app } from "../../../firebase.config";
 
 import {
   Box,
@@ -6,6 +11,7 @@ import {
   Stack,
   Heading,
   Text,
+  Image,
   Container,
   Input,
   Button,
@@ -24,6 +30,12 @@ import {
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import Blur from "../background/Blur";
+import {
+  GoogleAuthProvider,
+  getAuth,
+  signInWithPopup,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 
 const avatars = [
   {
@@ -48,8 +60,125 @@ const avatars = [
   },
 ];
 
-export default function SignupComponent() {
+export default function SignupComponent(props) {
+  let auth = getAuth();
   let [showPassword, setShowPassword] = useState();
+  let [userData, setUserData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+  let [displayWarning, setDisplayWarning] = useState(false);
+  function handleUserDataChange(event) {
+    const { name, value } = event.target;
+    setUserData((prev) => ({ ...prev, [name]: value }));
+    if (name === "password") {
+      let mediumPassword = new RegExp(
+        "((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))"
+      );
+      let passwordCheck = mediumPassword.test(value);
+      if (passwordCheck) {
+        setUserData((prev) => ({ ...prev, [name]: value }));
+        setDisplayWarning(false);
+      } else {
+        if (value !== "") {
+          setDisplayWarning(true);
+        } else {
+          setDisplayWarning(false);
+        }
+      }
+    }
+  }
+  let navigate = useNavigate();
+
+  async function submitUserData() {
+    const filter = new RegExp(
+      /^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/,
+      "gm"
+    );
+    if (displayWarning) {
+      alert("Enter a strong Password");
+    } else if (userData.firstName === "" || userData.lastName === "") {
+      alert("Enter a valid Name ");
+    } else if (userData.email === "" && !filter.test(userData.email)) {
+      alert("Enter a valid Email");
+    } else {
+      await createUserWithEmailAndPassword(
+        auth,
+        userData.email,
+        userData.password
+      )
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          props.setLoginData((prev) => ({
+            ...prev,
+            id: user.uid,
+          }));
+          const { email, displayName } = user;
+          console.log("User", email, displayName);
+          const { firstName, lastName } = userData;
+          saveUser(user.uid, {
+            email,
+            firstName,
+            lastName,
+            premium: false,
+            login: false,
+            videoURL: "",
+            data: props.defaultData,
+          });
+          navigate("/login");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          if (errorCode === "auth/email-already-in-use") {
+            alert("Email already in use");
+            setUserData((prev) => ({ ...prev, email: "" }));
+          }
+        });
+    }
+  }
+  function signUpWithGmail() {
+    let provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        const user = result.user;
+        console.log("user from signup", user);
+        jsCookies.setItem("userLoginStatus", JSON.stringify(true));
+        jsCookies.setItem("user", JSON.stringify(user));
+        props.setLoginData((prev) => ({
+          ...prev,
+          id: user.uid,
+        }));
+        const { firstName, lastName } = userData;
+        const { email, displayName } = user;
+        saveUser(user.uid, {
+          email,
+          firstName: displayName,
+          lastName: "",
+          premium: false,
+          login: false,
+          videoURL: "",
+          data: props.defaultData,
+        });
+        // setTimeout(() => {
+        //     console.log("updating....");
+        //     updateUser(user.uid, {
+
+        //     });
+        // }, 1000);
+        navigate(`/dashboard/user/${user.uid}`);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, "->", errorMessage);
+      });
+  }
   return (
     <Box position={"relative"}>
       <Container
@@ -62,7 +191,12 @@ export default function SignupComponent() {
         <Stack spacing={{ base: 10, md: 20 }}>
           <Heading
             lineHeight={1.1}
-            fontSize={{ base: "3xl", sm: "4xl", md: "5xl", lg: "6xl" }}
+            fontSize={{
+              base: "3xl",
+              sm: "4xl",
+              md: "5xl",
+              lg: "6xl",
+            }}
           >
             Students, Interns{" "}
             <Text
@@ -110,8 +244,14 @@ export default function SignupComponent() {
               bg={"gray.800"}
               color={"white"}
               rounded={"full"}
-              width={useBreakpointValue({ base: "44px", md: "60px" })}
-              height={useBreakpointValue({ base: "44px", md: "60px" })}
+              width={useBreakpointValue({
+                base: "44px",
+                md: "60px",
+              })}
+              height={useBreakpointValue({
+                base: "44px",
+                md: "60px",
+              })}
               position={"relative"}
               _before={{
                 content: '""',
@@ -136,12 +276,14 @@ export default function SignupComponent() {
           p={{ base: 4, sm: 6, md: 8 }}
           spacing={{ base: 8 }}
           maxW={{ lg: "lg" }}
+          boxShadow="2xl"
         >
           <Stack spacing={4}>
             <Heading
               color={"gray.800"}
               lineHeight={1.1}
               fontSize={{ base: "2xl", sm: "3xl", md: "4xl" }}
+              paddingBottom="13px"
             >
               Join Us
               <Text
@@ -163,24 +305,48 @@ export default function SignupComponent() {
                 <Box>
                   <FormControl id="firstName" isRequired>
                     <FormLabel>First Name</FormLabel>
-                    <Input type="text" />
+                    <Input
+                      paddingX="6px"
+                      name="firstName"
+                      value={userData.firstName}
+                      type="text"
+                      onChange={handleUserDataChange}
+                    />
                   </FormControl>
                 </Box>
                 <Box>
                   <FormControl id="lastName">
                     <FormLabel>Last Name</FormLabel>
-                    <Input type="text" />
+                    <Input
+                      paddingX="6px"
+                      name="lastName"
+                      value={userData.lastName}
+                      type="text"
+                      onChange={handleUserDataChange}
+                    />
                   </FormControl>
                 </Box>
               </HStack>
               <FormControl id="email" isRequired>
                 <FormLabel>Email address</FormLabel>
-                <Input type="email" />
+                <Input
+                  paddingX="6px"
+                  name="email"
+                  value={userData.email}
+                  type="email"
+                  onChange={handleUserDataChange}
+                />
               </FormControl>
               <FormControl id="password" isRequired>
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
-                  <Input type={showPassword ? "text" : "password"} />
+                  <Input
+                    paddingX="6px"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={userData.password}
+                    onChange={handleUserDataChange}
+                  />
                   <InputRightElement h={"full"}>
                     <Button
                       variant={"ghost"}
@@ -193,6 +359,15 @@ export default function SignupComponent() {
                   </InputRightElement>
                 </InputGroup>
               </FormControl>
+              {displayWarning && (
+                <Text
+                  fontFamily={"heading"}
+                  fontSize={{ base: "xs", md: "sm" }}
+                  color={"red"}
+                >
+                  Password is weak !
+                </Text>
+              )}
               <Stack spacing={10} pt={2}>
                 <Button
                   loadingText="Submitting"
@@ -202,14 +377,38 @@ export default function SignupComponent() {
                   _hover={{
                     bg: "blue.500",
                   }}
+                  onClick={submitUserData}
                 >
                   Sign up
                 </Button>
               </Stack>
+
               <Stack pt={6}>
                 <Text align={"center"}>
-                  Already a user? <Link color={"blue.400"}>Login</Link>
+                  Already a user?{" "}
+                  <Link href="/login" color={"blue.400"}>
+                    Login
+                  </Link>
                 </Text>
+              </Stack>
+              <Stack spacing={10} pt={5}>
+                <Button
+                  loadingText="Submitting"
+                  size="lg"
+                  bg={"white"}
+                  color={"blue.500"}
+                  shadow="lg"
+                  _hover={{
+                    shadow: "xl",
+                  }}
+                  marginBottom="15px"
+                  border="2px"
+                  borderColor="gray.200"
+                  padding="6"
+                >
+                  <Image src={googleLogo} alt="logo og google" mr="3" /> Sign up
+                  with Google
+                </Button>
               </Stack>
             </Stack>
           </Box>

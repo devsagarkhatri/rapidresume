@@ -1,7 +1,7 @@
 import React from "react";
 import { Svg, Path, G } from "@react-pdf/renderer";
 
-import getInlineStyles from "../../../jss/GlobalStyles";
+import getInlineStyles from "../../globals/styles/GlobalStyles";
 
 const PhoneSvg = () => {
   return (
