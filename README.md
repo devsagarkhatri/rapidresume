@@ -13,7 +13,7 @@ Why Rapid Resume ?
 •  Almost all online resume builder sdon’t provide any convenience for resizing the fonts of the resume.      
 
 
-****Demo Link :****
+****Demo Link :**** https://rapidresume.vercel.app/
 
 ****Installation :****
 
@@ -57,6 +57,6 @@ You are done! Now you can start editing the React project in the new folder that
 ```apache-2.0```
 
 **Authors :**
-
-R.M.Samrat (contact - samratrm2@gmail.com)          
 Sagar Khatri (contact - dev.sagarkhatri@gmail.com)
+R.M.Samrat (contact - samratrm2@gmail.com)          
+
