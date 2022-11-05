@@ -40,6 +40,7 @@ const PricingPlan = ({ id }) => {
       id="pricing"
       className="flex flex-col rounded-2xl bg-no-repeat bg-contain mx-auto justify-around items-center p-5  relative"
     >
+      {console.log(">>>>>>", id)}
       <h4 className="font-semibold mb-2">Pricing</h4>
       <h2 className="text-3xl font-bold mb-20 ">Choose the right plan</h2>
       <div className="flex justify-start items-center  ">

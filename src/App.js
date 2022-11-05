@@ -1,6 +1,5 @@
 import "./App.css";
 
-
 import { Routes, Route } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
 import jsCookies from "js-cookies";
@@ -12,6 +11,7 @@ import Login from "./components/molecule/login/Login";
 import Signup from "./components/molecule/signup/Signup";
 import Pricing from "./components/molecule/pricing/Pricing";
 import { updateUser } from "../src/globals/config/firebaseStorage/userData";
+import Header from "./components/atoms/header/Header";
 function App() {
   let [pageRef, setPageRef] = useState(useRef());
 
@@ -134,7 +134,7 @@ function App() {
       loginData.id &&
         setInterval(() => {
           updateUser(loginData.id, { data: content });
-        }, 10000);
+        }, 5000);
     }
   }, [content]);
 
@@ -166,7 +166,7 @@ function App() {
           path="/payments"
           element={
             <>
-              {!loginData.isPremiumUser ? (
+              {loginData.isPremiumUser ? (
                 <Pricing
                   loginDetails={loginData}
                   setLoginDetails={setLoginData}
@@ -235,7 +235,12 @@ function App() {
             />
           </>
         )}
-        <Route path="/pricing" element={<Pricing />} />
+        <Route
+          path="/pricing"
+          element={
+            <Pricing loginDetails={loginData} setLoginDetails={setLoginData} />
+          }
+        />
         {loginData.isLoggedin ? (
           <>
             <Route

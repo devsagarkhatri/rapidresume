@@ -56,7 +56,6 @@ export default function Header({ loginDetails, setLoginDetails }) {
 
   return (
     <Box boxShadow={"sm"} className={"container"}>
-      
       <Flex
         color={useColorModeValue("white", "gray.600")}
         minH={"60px"}
@@ -107,7 +106,17 @@ export default function Header({ loginDetails, setLoginDetails }) {
               fontWeight={400}
               variant={"link"}
               color={"white"}
-              href={"/dashboard/user/:" + loginDetails}
+              href={"/payments"}
+            >
+              Be Premium
+            </Button>
+            <Button
+              as={"a"}
+              fontSize={"sm"}
+              fontWeight={400}
+              variant={"link"}
+              color={"white"}
+              href={"/dashboard/user/" + loginDetails.id}
             >
               Dashboard
             </Button>
