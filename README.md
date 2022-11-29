@@ -49,20 +49,20 @@ You are done! Now you can start editing the React project in the new folder that
 
 ### Front End :     
 
-•Reactjs    
-•Javascript      
-•Chakra UI    
+•   Reactjs    
+•   Javascript      
+•   Chakra UI    
 
  ### Back End :
-•Firebase (auth & firestore for DB)       
+•   Firebase (auth & firestore for DB)       
 
 **Third Party Tools :** 
 
-•Firebase       
-•Cloudinary      
-•Razorpay       
-•Figma    
-•Git    
+•   Firebase       
+•   Cloudinary      
+•   Razorpay       
+•   Figma    
+•   Git    
 
 ## Authors  
 
