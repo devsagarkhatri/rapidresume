@@ -4,11 +4,7 @@
 
        
 An application which will be a one stop solution for selecting, creating and modifying applicant’s resumes, that can be easily downloaded and shared.
-“RapidResume” bring together job applicants to standout with professional customresumes that can be generated in minutes.    
-
-•  Almost all online resume builders don’t allow users to re-arrange various sections in their order of preference, this makes the resume stretch to multiple pages.      
-
-•  Almost all online resume builder sdon’t provide any convenience for resizing the fonts of the resume.      
+“RapidResume” bring together job applicants to standout with professional customresumes that can be generated in minutes. Almost all online resume builders don’t allow users to re-arrange various sections in their order of preference, this makes the resume stretch to multiple pages. Almost all online resume builder sdon’t provide any convenience for resizing the fonts of the resume.      
 
 
 ## Table of Content 
