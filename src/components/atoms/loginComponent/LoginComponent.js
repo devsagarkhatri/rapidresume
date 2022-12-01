@@ -61,7 +61,7 @@ const avatars = [
 
 export default function LoginComponent(props) {
   let [showPassword, setShowPassword] = useState();
-  let [loginData, setLoginData] = useState({ email: "", password: "" });
+  let [loginData, setLoginData] = useState({ email: "dummy.login@gmail.com", password: ".ABC123abc" });
   let [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
